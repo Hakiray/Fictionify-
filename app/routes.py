@@ -77,3 +77,5 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('registration.html', title='Register')
+
+
