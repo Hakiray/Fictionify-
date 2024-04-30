@@ -1,9 +1,8 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User
+from app.models import User, FavoriteMovie
 from urllib.parse import urlsplit
 
 
@@ -77,3 +76,69 @@ def register():
         return redirect(url_for('login'))
     
     return render_template('registration.html', title='Register')
+
+
+@app.route('/api/favorites/add', methods=['POST'])
+def add_to_favorites():
+    movie_data = request.json
+    print(movie_data)
+    print('aaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+    if not isinstance(movie_data, list):
+        return jsonify({"error": "Expected list of movies"}), 400  # Проверяем, что movie_data - список
+
+    # Обработка каждого фильма в списке
+    for data in movie_data:
+        existing_movie = FavoriteMovie.query.filter_by(
+            user_id=current_user.id, 
+            name=data['name']
+        ).first()
+
+        if existing_movie:
+            # Если фильм уже в списке понравившихся, пропускаем его
+            print('aaaaaaaaaaaaaaaaaa')
+            continue
+
+        movie = FavoriteMovie(
+            name=data['name'],
+            description=data['description'],
+            shortDescription=data['shortDescription'],
+            kp_rating=data['rating']['kp'],
+            imdb_rating=data['rating']['imdb'],
+            ageRating=data['ageRating'],
+            posterUrl=data['poster']['url'],
+            posterPreviewUrl=data['poster']['previewUrl'],
+            genres=', '.join([genre['name'] for genre in data['genres']]),  # Преобразуем в строку
+            countries=', '.join([country['name'] for country in data['countries']]),  # Преобразуем в строку
+            releaseStart=data['releaseYears'][0]['start'],  # Год начала
+            releaseEnd=data['releaseYears'][0]['end'],  # Год окончания
+            user_id=current_user.id,  # Идентификатор текущего пользователя
+        )
+    db.session.add(movie)  # Добавляем фильм в базу данных
+    # Сохраняем все изменения в базе данных
+    db.session.commit()
+
+    return jsonify({'message': 'Movies added to favorites'}), 200
+
+
+@app.route('/api/favorites', methods=['GET'])
+def get_favorites():
+    favorites = db.session.query(FavoriteMovie).filter_by(user_id=current_user.id).all()
+    return jsonify([
+        {
+            'id': favorite.id,
+            'name': favorite.name,
+            'description': favorite.description,
+            'shortDescription': favorite.shortDescription,
+            'kp_rating': favorite.kp_rating,
+            'imdb_rating': favorite.imdb_rating,
+            'ageRating': favorite.ageRating,
+            'posterUrl': favorite.posterUrl,
+            'posterPreviewUrl': favorite.posterPreviewUrl,
+            'genres': favorite.genres,
+            'countries': favorite.countries,
+            'releaseStart': favorite.releaseStart,
+            'releaseEnd': favorite.releaseEnd,
+        }
+        for favorite in favorites
+    ])
