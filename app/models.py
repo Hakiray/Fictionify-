@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+    favorites: so.WriteOnlyMapped['FavoriteMovie'] = so.relationship(back_populates='author')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -38,3 +39,21 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+    
+
+class FavoriteMovie(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    name: so.Mapped[str] = so.mapped_column(sa.String(120), nullable=True)
+    description: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    shortDescription: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    kp_rating: so.Mapped[float] = so.mapped_column(sa.Float, nullable=True)
+    imdb_rating: so.Mapped[float] = so.mapped_column(sa.Float, nullable=True)
+    ageRating: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
+    posterUrl: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    posterPreviewUrl: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    genres: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    countries: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
+    releaseStart: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
+    releaseEnd: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
+    author: so.Mapped['User'] = so.relationship(back_populates='favorites')

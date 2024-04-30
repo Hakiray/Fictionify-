@@ -5,31 +5,51 @@ const options = {
     headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
   };
 
+let Liked = []
 //получение пользователя с каким-либо id
-/*
-fetch(
-    ссылка на конкретного юзера, который зашел, {
-        method "GET",
-    }
-).then(data => {
-    return data.json();
-}).then((info) => {
-    console.log(info)
-})
+function getUserLike(){
+    fetch('/api/favorites', {
+        method: "GET",
+    })
+    .then(response => response.json())
+    .then(info => {
+        // Предполагая, что info - это массив объектов, представляющих понравившиеся фильмы
+        Liked = info; // Сохраняем полученные данные в список Liked
+        console.log(Liked); // Выводим в консоль список Liked
+    })
+    .catch(error => {
+        console.error('Ошибка при получении данных:', error);
+    });
+}
 
- 
-fetch(
-    ссылка на конкретного юзера, который зашел, {
-        method "Post",      //delete - удаление, put - Обновление
-        body: JSON.stingify(Liked, Marked) возможно можно создать структуру, которая содержит id пользователя
-    }
-).then(data => {
-    return data.json();
-}).then((info) => {
-    console.log(info)
-})
+getUserLike();
 
-*/
+function fetchUser(Liked){
+    fetch('/api/favorites/add', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(Liked),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Something went wrong with the network response.');
+        }
+    })
+    .then(info => {
+        console.log(info);
+    })
+    .catch(error => {
+        console.error('There was an error:', error);
+    });
+}
+
+
+
+
 let i = 0;
 let j = 1;
 let ImageList;
@@ -43,7 +63,7 @@ let GenresName = '';
 let CountriesName = '';
 
 function fetchMovies(){
-    API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears&selectFields=persons${ReleaseYearsStart}${GenresName}${CountriesName}`;
+    API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
     fetch(API_URL, options)
         .then(response => response.json())
         .then(response => {
@@ -125,11 +145,11 @@ const Rating = document.querySelector('.Rating');
 
 
 let Like = document.querySelector('.Heart2');
-let Liked = []
 Like.addEventListener('click', () =>{
     if (!Liked.some(item => item.name === ImageList.docs[i-1].name)) {
         Liked.push(ImageList.docs[i-1]);
         console.log(JSON.stringify(Liked));
+        fetchUser([Liked[Liked.length-1]]);
     }
 })
 Like.addEventListener('click', ThroughList);
