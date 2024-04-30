@@ -1,3 +1,5 @@
+
+
 * {
    margin: 0;
    padding: 0;
@@ -20,7 +22,20 @@
   background: #ef5350;
   color: white;
  }
- 
+ .alert {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 20px;
+  padding: 10px 20px; /* Отступы внутри сообщения */
+  border: 1px solid #d4edda; /* Граница вокруг сообщения */
+  background-color: #f8d7da; /* Цвет фона сообщения */
+  color: #721c24; /* Цвет текста сообщения */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Добавим тень для видимости */
+  margin-top: 10px; /* Отступ сверху, чтобы не прилипать к верхней границе */
+}
+
  .wrapper h1{
   font-size: 36;
   text-align: center;
@@ -32,6 +47,8 @@
   height: 50px;
   margin: 30px 0;
  }
+
+
  .input-box input{
   width: 100%;
   height: 100%;
