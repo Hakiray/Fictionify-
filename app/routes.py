@@ -13,6 +13,10 @@ from urllib.parse import urlsplit
 def index():
     return render_template('main1.html', title='Home')
 
+@app.route('/qwe')
+def qwe():
+    return render_template('liked_movies.html', title='q')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
