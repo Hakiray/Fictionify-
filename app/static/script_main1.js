@@ -91,7 +91,7 @@ function ThroughList(){
         return;
     }
     if (i === LenOfImageList-1 ){
-        if (ImageList.docs[i].poster.url !== undefined && ImageList.docs[i].poster.url != null){
+        if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url){
             image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
             MovieName.textContent = `${ImageList.docs[i].name}`;
             countriesList = ImageList.docs[i].countries.map(country => country.name);
@@ -111,7 +111,7 @@ function ThroughList(){
             ThroughList();
         }
         }
-    if (ImageList.docs[i].poster.url !== undefined && ImageList.docs[i].poster.url != null){
+    else if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
         image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
         MovieName.textContent = `${ImageList.docs[i].name}`;
         countriesList = ImageList.docs[i].countries.map(country => country.name);
@@ -129,7 +129,7 @@ function ThroughList(){
         console.log(i);
     }else{
         for (i; i<= LenOfImageList-1; i++){
-            if (ImageList.docs[i].poster.url !== undefined && ImageList.docs[i].poster.url != null){
+            if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
                 ThroughList()
                 break;
             }
