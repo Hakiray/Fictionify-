@@ -9,7 +9,7 @@ html{
     width: 100%
 }
 .wrapper{
-    width: 80%; 
+    width: 80%;
     max-width: 1200px; 
     min-width: 1200px;
     margin: auto;
@@ -19,6 +19,7 @@ html{
     border-top: 0px solid #f5f5f5;
     border-left: 0px solid #f5f5f5;
     z-index: 200;
+    overflow-y: hidden;
 }
 
 header{
@@ -168,7 +169,184 @@ header{
     border-radius: 15px;
     background:#FFEE58;
 }
+/*тут Liked_movies*/
+.mv_li1 {
+    margin-top: 0;
+    padding-left: 0;
+    height: 700px;
+    overflow-y: scroll;
+}
+.mv_li {
+    margin-top: 0;
+    padding-left: 0;
+}
+.like_movie_li {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    border-bottom: 1px solid #aaa;
+}
 
+.like_movie_li:hover {
+    background: white;
+}
+
+.like_movie_li .movie_photo_li {
+    width: 20%;
+    margin-right: 5px;
+}
+
+.like_movie_li .movie_describe_li{
+    width: 80%;
+    color: gray;
+}
+
+.like_movie_li .movie_describe_li .movie_name_li{
+    font-size: 30px;
+}
+
+.like_movie_li .movie_describe_li .movie_data_li {
+    font-size: 20px;
+}
+
+.like_movie_li .movie_describe_li .movie_rating_li {
+    font-size: 30px;
+}
+
+.like_movie_li .movie_describe_li .movie_rating_li img{
+    width: 30px;
+    height: 30px;
+    padding-left: 0;
+    padding-top: 5px;
+}
+
+.like_movie_li img{
+    padding-left: 10px;
+    padding-top: 3px;
+    width: 70px;
+    height: 100px;
+}
+
+.flex_mv {
+    display: flex;
+}
+
+.selected_movie{
+    background-color: #f5f5f5;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.movie_photo {
+    align-content: flex-end;
+    width: 225px;
+    height: 350px;
+}
+
+.mv_pnl_btn {
+    width: 30px;
+    height: 30px;
+}
+
+.switch_menu {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 20px;
+    justify-content: space-evenly;
+    margin-bottom: 6px;
+}
+
+.movie_element {
+    color: gray;
+    font-size: 20px;
+}
+
+.bl {
+    color: black;
+}
+
+.movie_data {
+    width: 70%;
+    float: left;
+}
+
+.movie_panel {
+    width: 30%;
+    float: left;
+}
+
+.movie_panel_li {
+    background-color: #f5f5f5;
+}
+
+.movie_panel_btn {
+    display: flex;
+    border-bottom: 1px solid #aaa;
+}
+
+.movie_panel_btn:hover {
+    background: white;
+}
+
+.btn_name {
+    font-size: 20px;
+    margin-left: 5px;
+}
+
+.rating_block {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.logo1 {
+    width: 50px;
+    height: 50px;
+}
+.logo2 {
+    width: 50px;
+    height: 50px;
+}
+.movie_name {
+    background-color: white;
+    color: black;
+    text-align: left;
+    font-size: 20px;
+    margin-top: -24px;
+    margin-left: 10px;
+    margin-bottom: -10px;
+}
+
+.movie_retell {
+    color: gray;
+    font-size: 20px;
+}
+
+.select_option {
+    color: gray;
+    font-size: 25px;
+}
+
+.movie_describe {
+    background: #f5f5f5;
+}
+
+.movie_text {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.rate {
+    font-size: 40px;
+    color: #4cad5e;
+    padding-left: 10px;
+}
+
+
+/*конец*/
 /*Свайп картинок, позиция эя*/
 .MoviePicture {
     position: relative;

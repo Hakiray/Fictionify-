@@ -5,6 +5,14 @@ import sqlalchemy as sa
 from app.models import User, FavoriteMovie
 from urllib.parse import urlsplit
 
+@app.route('/liked_movies')
+def liked_movies():
+    return render_template('liked_movies.html')
+
+
+@app.route('/main1')
+def main1():
+    return render_template('main1.html')
 
 @app.route('/')
 @app.route('/index')

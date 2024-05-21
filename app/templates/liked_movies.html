@@ -26,46 +26,44 @@
                             <div class="Heart"><i class='bx bxs-heart bx-lg' ></i></div>
                             <div class="Search"><i class='bx bx-search bx-lg'></i></div>
                             <div class="Message"><i class='bx bxs-conversation bx-lg'></i></div>
-                            <a href="main1.html"><!-- ссылка на main1.html поменять тут-->
+                            <a href="{{ url_for('main1') }}"><!-- ссылка на main1.html поменять тут-->
                                 <div class="Movie"><i class='bx bxs-film bx-lg'></i></div> 
                             </a>
                             <div class="Favorites"><i class='bx bxs-bookmark bx-lg'></i></div>
                         </div>
                     </nav>
                     <div class="content">
-                        <ul class="mv_li">
-                            <li>
-                                <div class="like_movie_li">
-                                    <div class="movie_photo_li">
-                                        <img src="{{ url_for('static', filename='bocchi_the_rock.webp') }}">
+                        <ul class="mv_li1">
+                            <div class="like_movie_li">
+                                <div class="movie_photo_li">
+                                    <img src="{{ url_for('static', filename='bocchi_the_rock.webp') }}">
+                                </div>
+                                <div class="movie_describe_li">
+                                    <div class="movie_name_li">Bocchi the rock</div>
+                                    <div class="movie_data_li">
+                                        2024 109 мин. 16+
                                     </div>
-                                    <div class="movie_describe_li">
-                                        <div class="movie_name_li">Bocchi the rock</div>
-                                        <div class="movie_data_li">
-                                            2024 109 мин. 16+
-                                        </div>
-                                        <div class="movie_rating_li">
-                                            <img src="{{ url_for('static', filename='star.png') }}"> 7.8
-                                        </div>
+                                    <div class="movie_rating_li">
+                                        <img src="{{ url_for('static', filename='star.png') }}"> 7.8
                                     </div>
                                 </div>
-                            </li>
-                            <li>
-                                <div class="like_movie_li">
-                                    <div class="movie_photo_li">
-                                        <img src="{{ url_for('static', filename='drive.webp') }}">
+                            </div>
+
+                            <div class="like_movie_li">
+                                <div class="movie_photo_li">
+                                    <img src="{{ url_for('static', filename='drive.webp') }}">
+                                </div>
+                                <div class="movie_describe_li">
+                                    <div class="movie_name_li">Драйв</div>
+                                    <div class="movie_data_li">
+                                        2011 100 мин. 18+
                                     </div>
-                                    <div class="movie_describe_li">
-                                        <div class="movie_name_li">Драйв</div>
-                                        <div class="movie_data_li">
-                                            2011 100 мин. 18+
-                                        </div>
-                                        <div class="movie_rating_li">
-                                            <img src="{{ url_for('static', filename='star.png') }}"> 7.3
-                                        </div>
+                                    <div class="movie_rating_li">
+                                        <img src="{{ url_for('static', filename='star.png') }}"> 7.3
                                     </div>
                                 </div>
-                            </li>
+                            </div>
+
                         </ul>
                     </div>
                 </aside>
@@ -136,6 +134,6 @@
                 </div>
             </div>
         </div>
-    <script src="script_main1.js"></script>
+    <script src="../static/script_main1.js"></script>
     </body>
 </html>
