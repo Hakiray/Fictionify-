@@ -176,6 +176,14 @@ header{
     height: 700px;
     overflow-y: scroll;
 }
+
+.mv_li2 {
+    margin-top: 0;
+    padding-left: 0;
+    height: 659px;
+    overflow-y: scroll;
+}
+
 .mv_li {
     margin-top: 0;
     padding-left: 0;
@@ -445,6 +453,52 @@ header{
     rotate: 45deg;
     color:#e67070;
 }
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+input[type="text"] {
+    padding: 10px 15px;
+    width: 350px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+input[type="text"]:focus {
+    border-color: #663399;
+}
+
+.search-c {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.icon-button {
+    margin-left: 8px;
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #663399;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 24px;
+    text-align: center;
+}
+.icon-button:hover {
+    background-color: #53287b;
+    transform: scale(1.1);
+}
+
 /* модальное окно  */
 .modal{
     position:fixed;
