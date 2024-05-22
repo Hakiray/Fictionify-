@@ -9,6 +9,10 @@ from urllib.parse import urlsplit
 def liked_movies():
     return render_template('liked_movies.html')
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
 
 @app.route('/main1')
 def main1():
