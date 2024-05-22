@@ -371,7 +371,33 @@ if (document.querySelector('.mv_li1')){
                                 <li>
                                     <div class="movie_panel_btn ratte">
                                         <img class="mv_pnl_btn" src="../static/star.png" }}">
-                                        <div class="btn_name">Оценить</div>
+                                        <div class="btn_name" id="open-modal-btn">Оценить</div>
+                                    </div>
+                                    <div class="modal" id="my-modal">
+                                        <div class="modal_box">
+                                            <button type="button" class="modal_close_btn" id="close-my-modal-btn">
+                                                <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.09082 0.03125L22.9999 22.0294L20.909 24.2292L-8.73579e-05 2.23106L2.09082 0.03125Z" fill="#333333"></path>
+                                                    <path d="M0 22.0295L20.9091 0.0314368L23 2.23125L2.09091 24.2294L0 22.0295Z" fill="#333333"></path>
+                                                </svg>
+                                            </button>
+                                            <div class="rate2">
+                                                <img src="../static/star.png" width='50' height="50">
+                                                <p class="bad">1</p>
+                                                <p class="bad">2</p>
+                                                <p class="bad">3</p>
+                                                <p class="bad">4</p>
+                                                <p class="okay">5</p>
+                                                <p class="okay">6</p>
+                                                <p class="good">7</p>
+                                                <p class="good">8</p>
+                                                <p class="good">9</p>
+                                                <p class="good">10</p>
+                                            </div>
+                                            <div class="send">
+                                                <p>Сохранить</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -380,7 +406,7 @@ if (document.querySelector('.mv_li1')){
         `
         return div
     }
-    let sigma;
+    let sigma;  //хранение текущего названия фильма
     function UpdateMovieCard(id){
         const MovieCardContent = document.querySelector('.selected_movie');
         movie = Liked[id];
@@ -390,7 +416,8 @@ if (document.querySelector('.mv_li1')){
         MovieCardContent.innerHTML = '' ;
         MovieCardContent.appendChild(MovieCard(movie))
     }
-    
+
+    //нажатие на фильм
     document.addEventListener('DOMContentLoaded', function() {
         // Выбираем родительский элемент, например, <ul>
         const list = document.querySelector('.mv_li1');
@@ -416,6 +443,8 @@ if (document.querySelector('.mv_li1')){
         });
     });
     let index;
+
+    //меняем карточку
     document.addEventListener('DOMContentLoaded', function() {
         // Выбираем родительский элемент, например, <ul>
         const list = document.querySelector('.mv_li1');
@@ -438,12 +467,121 @@ if (document.querySelector('.mv_li1')){
     });
     
     //дальше меню на карточке фильма
+
+    //получение внутрисайтовой оценки не надо она будет в списке Liked
+    /*function getfilmark(){
+        fetch('/api/favorites/filmid', {
+            method: "GET",
+        })
+        .then(response => response.json())
+        .then(info => {
+            InnerRating = info; 
+            console.log(InnerRating); 
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
+    }*/
+    //оценка
+
+    //Добавка класса Open
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            if(event.target && event.target.id === "open-modal-btn"){
+                var modal = document.getElementById("my-modal");
+                if (modal) {
+                    modal.classList.add("open");
+                    star = 11; //Отслеживаем открытие модального окна
+                    console.log('eshkere2')
+                } else {
+                    console.error('Element with id "my-modal" not found.');
+                }
+            }
+        });
+    })
+    //убираем класс Open
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            let closeButton = event.target.closest("#close-my-modal-btn");
+            if(closeButton){
+                var modal = document.getElementById("my-modal");
+                if (modal) {
+                    modal.classList.remove("open");
+                    console.log('eshkere2')
+                } else {
+                    console.error('Element with id "my-modal" not found.');
+                }
+            }
+        });
+    })
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            let closeButton = event.target.closest(".send");
+            if(closeButton && star !== 11){
+                Rate(star, sigma);
+                console.log('success');
+            }else if(closeButton && star ===11){
+                alert('поставьте оценку фильму');
+            }
+        });
+    })
+    //нажатие на число оценки
+    let star; 
     document.addEventListener('DOMContentLoaded', function() {
-        // Прикрепляем обработчик событий к документу, который реагирует на клики
+        let selected;
+        function resetColors() {
+            document.querySelectorAll('.rate2 p').forEach(function(p) {
+                p.style.color = ''; // Сброс цвета текста
+            });
+        }
+        document.body.addEventListener('click', function(e) {
+            // чекаем, что элемент на который нажали это тег p в .rate2
+            if (e.target && e.target.nodeName === 'P' && e.target.closest('.rate2')) {
+                resetColors();
+                star = e.target.textContent; 
+                selected = e.target;
+                if (['1', '2', '3', '4'].includes(star)) {
+                    selected.style.color = 'red';
+                } else if (['5', '6'].includes(star)) {
+                    selected.style.color = 'brown';
+                } else if (['7', '8', '9', '10'].includes(star)) {
+                    selected.style.color = 'green';
+                }
+                console.log(star);  
+                console.log(sigma);  
+            }
+        });
+    });
+
+    //запрос на отправку фильма и оценки пользователя нужен будет адрес
+    function Rate(star, sigma){
+        fetch('/api/favorites/фщфщфщфщфщ', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify([star, sigma]),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong with the network response.');
+            }
+        })
+        .then(info => {
+            console.log(info);
+        })
+        .catch(error => {
+            console.error('There was an error:', error);
+        });
+    }
+    //удаление
+    document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
-          // Проверяем, что элемент, по которому был совершён клик, имеет класс delete
+          // Проверяем, что элемент имеет класс delete
           if (event.target.closest('.delete')) {
-            // Ищем в списке элемент с атрибутом name, равным значению переменной sigma
+            // Ищем фильм с нужным названием sigma в Liked
             console.log(sigma)
             let index = Liked.findIndex(function(item) {
                 return item.name === sigma;
@@ -481,4 +619,5 @@ if (document.querySelector('.mv_li1')){
             console.error('There was an error:', error);
         });
     }
+
 }

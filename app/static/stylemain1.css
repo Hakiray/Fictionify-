@@ -445,3 +445,98 @@ header{
     rotate: 45deg;
     color:#e67070;
 }
+/* модальное окно  */
+.modal{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100vh;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, .3);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s ;
+}
+
+/*если класс open есть, то модальное окно отображается (у элемента с классом modal )*/
+.modal.open{
+    visibility: visible;
+    opacity: 1;
+}
+.modal_box{
+    position:relative;
+    max-width: 500px;
+    width: 1000px;
+    height: 150px;
+    padding: 20px;
+    z-index: 1;
+    margin: 30px 15px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 17px -7px rgba(34, 60, 80, 0.2);
+    transform:scale(0);
+    transition: transform .8s;
+}
+
+.modal_close_btn{
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top:8px;
+    right:8px;
+    padding: 10px;
+    z-index: 1000;
+    cursor:pointer;
+}
+.modal_close_btn:hover svg path{
+    fill:blue;
+}
+
+/*если у modal появится open, то настройки применятся к modal_box*/
+.modal.open .modal_box{
+    transform: scale(1);
+}
+
+.rate2{
+    margin-top: 30px;
+    background-color: #f5f5f5;
+    display:flex;
+    max-height: 50px;
+    align-items: center;
+    border: 3px solid black;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 30px;
+    line-height: 0px;
+    font-size: 30px;
+}
+.bad:hover{
+    color: red;
+    font-size: 35px;
+}
+.okay:hover{
+    color: brown;
+    font-size: 35px;
+}
+.good:hover{
+    color: green;
+    font-size: 35px;
+}
+.send{
+    border: 3px solid black;
+    background-color: white;
+    position:relative;
+    top: 15px;
+    left: 200px;
+    width: 100px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.send:hover{
+    background-color: #aaa;
+}
