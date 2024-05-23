@@ -33,7 +33,6 @@
                             <a href="{{ url_for('main1') }}"><!-- ссылка на main1.html поменять тут-->
                                 <div class="Movie"><i class='bx bxs-film bx-lg'></i></div> 
                             </a>
-                            <div class="Favorites"><i class='bx bxs-bookmark bx-lg'></i></div>
                         </div>
                     </nav>
                     <div class="content">
@@ -43,67 +42,10 @@
                 </aside>
                 <div class="selected_movie">
                     <div class="movie_data">
-                        <div class="movie_name"><h1>Драйв</h1></div>
-                        <ul class="switch_menu mv_li">
-                            <li class="select_option">
-                                О фильме
-                            </li>
-                            <li class="select_option">
-                                Рецензии зрителей
-                            </li>
-                        </ul>
-                        <div class="movie_describe">
-                            <div class="movie_text">
-                                <div class="movie_element">Год производства <strong class="bl">2011</strong></div>
-                                <div class="movie_element">Страна <strong class="bl">США</strong></div>
-                                <div class="movie_element">Жанр <strong class="bl">криминал, драма, триллер</strong></div>
-                                <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div>
-                                <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
-                                <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
-                                <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
-                                <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
-                                <div class="rating_block">
-                                    <div class="srv_rate">
-                                        <img class="logo" src="{{ url_for('static', filename='kinopoisk.jpg') }}">
-                                        <strong class="rate">7.3</strong>
-                                    </div>
-                                    <div class="srv_rate">
-                                        <img class="logo" src="{{ url_for('static', filename='imdb.jpg') }}">
-                                        <strong class="rate">7.8</strong>
-                                    </div>
-                                </div>
-                                <div class="movie_retell">
-                                    Великолепный водитель – при свете дня он выполняет каскадерские трюки на съёмочных площадках Голливуда, а по ночам ведет рискованную игру. Но один опасный контракт – и за его жизнь назначена награда. Теперь, чтобы остаться в живых и спасти свою очаровательную соседку, он должен делать то, что умеет лучше всего – виртуозно уходить от погони.
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="movie_panel">
-                        <div>
-                            <img class="movie_photo" src="{{ url_for('static', filename='drive.webp') }}">
-                        </div>
-                        <div class="movie_panel_li">
-                            <ul class="mv_li">
-                                <li>
-                                    <div class="movie_panel_btn">
-                                        <img class="mv_pnl_btn" src="{{ url_for('static', filename='add_zq.png') }}">
-                                        <div class="btn_name">Буду смотреть</div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="movie_panel_btn">
-                                        <img class="mv_pnl_btn" src="{{ url_for('static', filename='broken_heart.png') }}">
-                                        <div class="btn_name">Убрать из списка</div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="movie_panel_btn">
-                                        <img class="mv_pnl_btn" src="{{ url_for('static', filename='star.png') }}">
-                                        <div class="btn_name">Оценить</div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+                        
                     </div>
                 </div>
             </div>

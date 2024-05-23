@@ -13,6 +13,9 @@ def liked_movies():
 def search():
     return render_template('search.html')
 
+@app.route('/recomendation')
+def recomendation():
+    return render_template('recomendation.html')
 
 @app.route('/main1')
 def main1():
@@ -28,7 +31,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('recomendation'))
     
     if request.method == 'POST':
         username = request.form['Username']
@@ -39,9 +42,9 @@ def login():
             return redirect(url_for('login'))
         
         login_user(user, remember=False)
-        next_page = request.args.get('next', url_for('index'))       
+        next_page = request.args.get('next', url_for('recomendation'))       
         if not next_page or urlsplit(next_page).netloc!= '':
-            next_page = url_for('index')
+            next_page = url_for('recomendation')
         return redirect(next_page)
     return render_template('login.html', title='Login')
 

@@ -1,43 +1,22 @@
-<!-- templates/main1.html -->
 <!DOCTYPE html>
 <html lang="ru">
     <head>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylemain1.css') }}" />
+        <link rel="stylesheet" type="text/css" href="../static/firstrec.css" />
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <meta name="viewport" content="width=device-width, user-scalable=no">
-        <title>Main</title>
+        <title>first recomendations</title>
     </head>
     <body>
         <div class="wrapper">
             <header>Fictionify</header>
             <aside>
-                <form>
-                    <div class="LogoutPanel">
-                        <img src="{{ url_for('static', filename='user-solid-72.png') }}" class="Icon1">
-                        <a href="{{ url_for('logout') }}">  <!-- Ссылка на выход из системы -->
-                            <img src="{{ url_for('static', filename='log-out-regular-72.png') }}" class="Icon2">
-                        </a>
-                        <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
-                    </div>
-                </form>
-                <nav class="Navigation">
-                    <div class="Navigation2">
-                        <a href="{{ url_for('liked_movies') }}"> <!-- ссылка на html liked_movies поменять тут-->
-                            <div class="Heart"><i class='bx bxs-heart bx-lg' ></i></div>
-                        </a>
-                        <a href="{{ url_for('search') }}">
-                            <div class="Search"><i class='bx bx-search bx-lg'></i></div>
-                        </a>
-                        <div class="Message"><i class='bx bxs-conversation bx-lg'></i></div>
-                        <a href="{{ url_for('main1') }}"> <!-- ссылка на main1.html поменять тут-->
-                            <div class="Movie"><i class='bx bxs-film bx-lg'></i></div>
-                        </a>
-                        <!--убрал-->
-                    </div>
-                </nav>
+                <div class="question">
+                    <p class="text1">Какие фильмы вам нравятся?</p>
+                    <p class="text2">Ваши ответы помогут настроить рекомендации</p>
+                </div>
                 <div class="content">
                     <ul>
-                        <li><a href="#">Дата выхода</a>
+                        <li><a class="move" href="#">Дата выхода</a>
                             <ul class="ReleaseDate">
                                 <li><a href='#'>2023 - 2024</a></li>
                                 <li><a href='#'>2021 - 2022</a></li>
@@ -52,7 +31,7 @@
                                 <li><a href='#'>До 1980</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">Страны</a>
+                        <li><a  class="move" href="#">Страны</a>
                             <ul class="Country">
                                 <li><a href='#'>Китай</a></li>
                                 <li><a href='#'>Канада</a></li>
@@ -69,7 +48,7 @@
                                 <li><a href='#'>Великобритания</a></li>
                             </ul>
                         </li>
-                        <li><a href="#">Жанр</a>
+                        <li><a class="move" href="#">Жанр</a>
                             <ul class="Genre">
                                 <li><a href="#">аниме</a></li>
                                 <li><a href="#">биография</a></li>
@@ -106,27 +85,13 @@
                             </ul>
                         </li>
                     </ul>
+                    <a href="{{ url_for('main1') }}" class="save-link">
+                        <p class="save">Сохранить</p>
+                    </a>
                 </div>
             </aside>
-            <span class="MovePicture">
-                <a class="Tinder"><img src="{{ url_for('static', filename='zoo.webp') }}" width="350" height="500" alt=""></a>
-                <i class="MovieName">Зверополис</i>
-                <i class="Description">США 6+ 108 мин.</i>
-                <i class="Rating">8.3</i>
-            </span>
-            <span class="Action">
-                <span class="Heart2">
-                    <i class='bx bxs-heart bx-lg'></i>
-                </span>
-                <span class="Add">
-                    <i class='bx bx-bookmark-plus bx-lg'></i>
-                </span>
-                <span class="Cross">
-                    <i class='bx bx-plus bx-lg'></i>
-                </span>
-            </span>
         </div>
-    <script src="../static/script_main1.js">
+    <script src="../static/recomendation.js">
     </script>
     </body>
 </html>

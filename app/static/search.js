@@ -160,20 +160,8 @@ function MovieCard(movie){
                     <ul class="mv_li">
                         <li>
                             <div class="movie_panel_btn willwatch">
-                                <img class="mv_pnl_btn" src="../static/add_zq.png"">
-                                <div class="btn_name">Буду смотреть</div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="movie_panel_btn delete">
-                                <img class="mv_pnl_btn" src="../static/broken_heart.png"">
-                                <div class="btn_name">Убрать из списка</div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="movie_panel_btn ratte">
-                                <img class="mv_pnl_btn" src="../static/star.png" }}">
-                                <div class="btn_name">Оценить</div>
+                                <img class="mv_pnl_btn1" src="../static/heart.png"">
+                                <div class="btn_name1">Буду смотреть</div>
                             </div>
                         </li>
                     </ul>
@@ -183,8 +171,10 @@ function MovieCard(movie){
     return div
 }
 
+let newfilm;
 function UpdateMovieCard(movie){
     console.log(movie);
+    newfilm = movie;
     const MovieCardContent = document.querySelector('.selected_movie');
     MovieCardContent.innerHTML = '' ;
     MovieCardContent.appendChild(MovieCard(movie))
@@ -199,3 +189,42 @@ function displayResults(data) {
         resultsList.appendChild(movieElement);
     });
 }
+
+
+//ОШИБКА 500
+//отправлка лайкнутого фильма
+function fetchUser(Liked){
+    fetch('/api/favorites/add', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(Liked),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Something went wrong with the network response.');
+        }
+    })
+    .then(info => {
+        console.log(info);
+    })
+    .catch(error => {
+        console.error('There was an error:', error);
+    });
+}
+
+//сохраняем новый фильм с поиска
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+      // Проверяем, что элемент имеет класс delete
+      if (event.target.closest('.willwatch')) {
+        // Ищем фильм с нужным названием sigma в Liked
+        console.log(JSON.stringify([newfilm]));
+        fetchUser([newfilm]);// удаляю, отправляю фулл элемент удаляемый
+        //location.reload() //тип убрал и перезагружаю страницу
+      }
+    });
+  });
