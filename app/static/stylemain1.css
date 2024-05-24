@@ -9,7 +9,7 @@ html{
     width: 100%
 }
 .wrapper{
-    width: 80%; 
+    width: 80%;
     max-width: 1200px; 
     min-width: 1200px;
     margin: auto;
@@ -19,6 +19,7 @@ html{
     border-top: 0px solid #f5f5f5;
     border-left: 0px solid #f5f5f5;
     z-index: 200;
+    overflow-y: hidden;
 }
 
 header{
@@ -71,7 +72,12 @@ header{
 }
 
 
-
+.mv_pnl_btn1{
+    width: 25px;
+    height: 25px;
+    padding-bottom: 3px;
+    padding-left: 2px;
+}
 
 
 .Navigation{
@@ -168,7 +174,195 @@ header{
     border-radius: 15px;
     background:#FFEE58;
 }
+/*тут Liked_movies*/
+.mv_li1 {
+    margin-top: 0;
+    padding-left: 0;
+    height: 700px;
+    overflow-y: scroll;
+}
 
+.mv_li2 {
+    margin-top: 0;
+    padding-left: 0;
+    height: 659px;
+    overflow-y: scroll;
+}
+
+.mv_li {
+    margin-top: 0;
+    padding-left: 0;
+}
+.like_movie_li {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    border-bottom: 1px solid #aaa;
+}
+
+.like_movie_li:hover {
+    background: white;
+}
+
+.like_movie_li .movie_photo_li {
+    width: 20%;
+    margin-right: 5px;
+}
+
+.like_movie_li .movie_describe_li{
+    width: 80%;
+    color: gray;
+}
+
+.like_movie_li .movie_describe_li .movie_name_li{
+    font-size: 30px;
+}
+
+.like_movie_li .movie_describe_li .movie_data_li {
+    font-size: 20px;
+}
+
+.like_movie_li .movie_describe_li .movie_rating_li {
+    font-size: 30px;
+}
+
+.like_movie_li .movie_describe_li .movie_rating_li img{
+    width: 30px;
+    height: 30px;
+    padding-left: 0;
+    padding-top: 5px;
+}
+
+.like_movie_li img{
+    padding-left: 10px;
+    padding-top: 3px;
+    width: 70px;
+    height: 100px;
+}
+
+.flex_mv {
+    display: flex;
+}
+
+.selected_movie{
+    background-color: #f5f5f5;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.movie_photo {
+    align-content: flex-end;
+    width: 225px;
+    height: 350px;
+}
+
+.mv_pnl_btn {
+    width: 30px;
+    height: 30px;
+}
+
+.switch_menu {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 20px;
+    justify-content: space-evenly;
+    margin-bottom: 6px;
+}
+
+.movie_element {
+    color: gray;
+    font-size: 20px;
+}
+
+.bl {
+    color: black;
+}
+
+.movie_data {
+    width: 70%;
+    float: left;
+}
+
+.movie_panel {
+    width: 30%;
+    float: left;
+}
+
+.movie_panel_li {
+    background-color: #f5f5f5;
+}
+
+.movie_panel_btn {
+    display: flex;
+    border-bottom: 1px solid #aaa;
+}
+
+.movie_panel_btn:hover {
+    background: white;
+}
+
+.btn_name {
+    font-size: 20px;
+    margin-left: 5px;
+}
+.btn_name1 {
+    font-size: 20px;
+    margin-left: 8px;
+}
+.rating_block {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.logo1 {
+    width: 50px;
+    height: 50px;
+}
+.logo2 {
+    width: 50px;
+    height: 50px;
+}
+.movie_name {
+    background-color: white;
+    color: black;
+    text-align: left;
+    font-size: 20px;
+    margin-top: -24px;
+    margin-left: 10px;
+    margin-bottom: -10px;
+}
+
+.movie_retell {
+    color: gray;
+    font-size: 20px;
+}
+
+.select_option {
+    color: gray;
+    font-size: 25px;
+}
+
+.movie_describe {
+    background: #f5f5f5;
+}
+
+.movie_text {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.rate {
+    font-size: 40px;
+    color: #4cad5e;
+    padding-left: 10px;
+}
+
+
+/*конец*/
 /*Свайп картинок, позиция эя*/
 .MoviePicture {
     position: relative;
@@ -266,4 +460,145 @@ header{
 .Cross:hover{
     rotate: 45deg;
     color:#e67070;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+input[type="text"] {
+    padding: 10px 15px;
+    width: 350px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+input[type="text"]:focus {
+    border-color: #663399;
+}
+
+.search-c {
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.icon-button {
+    margin-left: 8px;
+    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #663399;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-size: 24px;
+    text-align: center;
+}
+.icon-button:hover {
+    background-color: #53287b;
+    transform: scale(1.1);
+}
+
+/* модальное окно  */
+.modal{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100vh;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, .3);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s ;
+}
+
+/*если класс open есть, то модальное окно отображается (у элемента с классом modal )*/
+.modal.open{
+    visibility: visible;
+    opacity: 1;
+}
+.modal_box{
+    position:relative;
+    max-width: 500px;
+    width: 1000px;
+    height: 150px;
+    padding: 20px;
+    z-index: 1;
+    margin: 30px 15px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 17px -7px rgba(34, 60, 80, 0.2);
+    transform:scale(0);
+    transition: transform .8s;
+}
+
+.modal_close_btn{
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top:8px;
+    right:8px;
+    padding: 10px;
+    z-index: 1000;
+    cursor:pointer;
+}
+.modal_close_btn:hover svg path{
+    fill:blue;
+}
+
+/*если у modal появится open, то настройки применятся к modal_box*/
+.modal.open .modal_box{
+    transform: scale(1);
+}
+
+.rate2{
+    margin-top: 30px;
+    background-color: #f5f5f5;
+    display:flex;
+    max-height: 50px;
+    align-items: center;
+    border: 3px solid black;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 30px;
+    line-height: 0px;
+    font-size: 30px;
+}
+.bad:hover{
+    color: red;
+    font-size: 35px;
+}
+.okay:hover{
+    color: brown;
+    font-size: 35px;
+}
+.good:hover{
+    color: green;
+    font-size: 35px;
+}
+.send{
+    border: 3px solid black;
+    background-color: white;
+    position:relative;
+    top: 15px;
+    left: 200px;
+    width: 100px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.send:hover{
+    background-color: #aaa;
 }
