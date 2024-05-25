@@ -7,6 +7,7 @@ let StrGenreList = '';
 let ReleaseYearsStart;
 let GenresName;
 let CountriesName;
+let SortingName = '';
 
 
 function getUserAPI_URL(){
@@ -32,7 +33,7 @@ function getUserAPI_URL(){
             CountriesName = `&countries.name=${StrReleaseCountry}`;
         }
         else {
-            CountriesName = ' ';
+            CountriesName = '';
         }
 
         if (Destroy[0].length >= 1) {
@@ -41,7 +42,7 @@ function getUserAPI_URL(){
             GenresName = `&genres.name=${StrReleaseGenre}`;
         }
         else {
-            GenresName = ' '
+            GenresName = ''
         }
         console.log(GenresName, CountriesName, ReleaseYearsStart);
         
@@ -56,7 +57,7 @@ getUserAPI_URL(); //Надо будет убрать api_url в
 console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
+    headers: {accept: 'application/json', 'X-API-KEY': '6EYB3EZ-6JD4Y60-PM5SHWP-BECR3SE'}
   };
 
 let Liked = []
@@ -137,9 +138,10 @@ if (document.querySelector('.Genre')){
     console.log(GenresName);
     console.log(ReleaseYearsStart);
     console.log(CountriesName);
+    console.log(SortingName);
     //запрос на фильмы
     function fetchMovies(){
-        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
+        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
         console.log(API_URL)
         console.log(GenresName);
         fetch(API_URL, options)
@@ -217,10 +219,6 @@ if (document.querySelector('.Genre')){
             }
         }
     }
-
-
-    //запрос на фильмы, чтобы с самого начала что-то было
-    fetchMovies();
 
 
     const image = document.querySelector('.Tinder');
@@ -349,6 +347,38 @@ if (document.querySelector('.Genre')){
             fetchMovies(); //это в recomendation.html не надо
             console.log(GenresName);
             console.log(API_URL);
+            event.preventDefault();
+        }
+    });
+    });
+
+    // выбор сортировки
+    let ReleaseSort = [];
+    let sortingList = document.querySelectorAll('.Sorting')
+
+    sortingList.forEach(function(Sort) {
+        Sort.addEventListener('click', function(event) {
+        if (event.target.tagName === 'A') {
+            let content = event.target.textContent;
+            let index = ReleaseSort.indexOf(content);
+            if (index !== -1) {
+                ReleaseSort.splice(index, 1);
+                event.target.style.background = '#f5f5f5';
+            } else {
+                ReleaseSort.push(content);
+                event.target.style.background = '#ffee58';
+            }
+            if (ReleaseSort.indexOf("по популярности") != -1 && ReleaseSort.indexOf("по новизне") != -1) {
+                SortingName = '&sortType=-1&sortField=votes.kp&sortType=-1&sortField=year';
+            }
+            else if (ReleaseSort.indexOf("по новизне") != -1) {
+                SortingName = '&sortType=-1&sortField=year';
+            }
+            else if (ReleaseSort.indexOf("по популярности") != -1) {
+                SortingName = '&sortType=-1&sortField=votes.kp';
+            }
+            console.log(SortingName);
+            fetchMovies();
             event.preventDefault();
         }
     });

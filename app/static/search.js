@@ -1,7 +1,7 @@
 let API_URL;
 const options = {
     method: 'GET',
-    headers: { accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW' }
+    headers: { accept: 'application/json', 'X-API-KEY': '6EYB3EZ-6JD4Y60-PM5SHWP-BECR3SE' }
 };
 
 var data;
