@@ -18,19 +18,31 @@ function getUserAPI_URL(){
         Destroy = info;
         console.log('adadada');
         console.log(Destroy);
+        if (Destroy[2].length >= 1) {
+            StrReleaseDate = Destroy[2][0].split(',');
+            StrReleaseDate = StrReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
+            ReleaseYearsStart = `&releaseYears.start=${StrReleaseDate}`;
+        }
+        else {
+            ReleaseYearsStart = "&releaseYears.start=1874-2050";
+        }
+        if (Destroy[1].length >= 1) {
+            StrReleaseCountry = Destroy[1][0].split(',');
+            StrReleaseCountry = StrReleaseCountry.join('&countries.name=');
+            CountriesName = `&countries.name=${StrReleaseCountry}`;
+        }
+        else {
+            CountriesName = ' ';
+        }
 
-        StrReleaseDate = Destroy[2][0].split(',');
-        StrReleaseDate = StrReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
-        ReleaseYearsStart = StrReleaseDate !== '' ? `&releaseYears.start=${StrReleaseDate}` : '&releaseYears.start=1874-2050';
-
-        StrReleaseCountry = Destroy[1][0].split(',');
-        StrReleaseCountry = StrReleaseCountry.join('&countries.name=');
-        CountriesName = StrReleaseCountry !== '' ? `&countries.name=${StrReleaseCountry}` : '';
-
-        StrReleaseGenre = Destroy[0][0].split(',');
-        StrReleaseGenre = StrReleaseGenre.join('&genres.name=');
-        GenresName = StrReleaseGenre !== '' ? `&genres.name=${StrReleaseGenre}` : '';
-
+        if (Destroy[0].length >= 1) {
+            StrReleaseGenre = Destroy[0][0].split(',');
+            StrReleaseGenre = StrReleaseGenre.join('&genres.name=');
+            GenresName = `&genres.name=${StrReleaseGenre}`;
+        }
+        else {
+            GenresName = ' '
+        }
         console.log(GenresName, CountriesName, ReleaseYearsStart);
         
         fetchMovies();
