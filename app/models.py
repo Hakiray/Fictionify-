@@ -19,13 +19,13 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
 
 @login.user_loader
 def load_user(id):
@@ -41,10 +41,11 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
-    
+
 
 class FavoriteMovie(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    kp_id: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
     name: so.Mapped[str] = so.mapped_column(sa.String(120), nullable=True)
     description: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
     shortDescription: so.Mapped[str] = so.mapped_column(sa.String(140), nullable=True)
@@ -73,8 +74,7 @@ class UserPreference(db.Model):
 
 class RateMovie(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
-    name: so.Mapped[str] = so.mapped_column(sa.String(120), nullable=True)
+    name: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
     rating: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
     author: so.Mapped['User'] = so.relationship(back_populates='rate')
-

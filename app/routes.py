@@ -4,27 +4,32 @@ from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
 from app.models import User, FavoriteMovie, UserPreference, RateMovie
 from urllib.parse import urlsplit, parse_qs
+from sqlalchemy import func
+
 
 @app.route('/liked_movies')
 def liked_movies():
     return render_template('liked_movies.html')
 
+
 @app.route('/search')
 def search():
     return render_template('search.html')
+
 
 @app.route('/recomendation')
 def recomendation():
     user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
     if not user_preference or not user_preference.preferences_chosen:
         return render_template('recomendation.html')
-    
+
     return render_template('main1.html')
 
 
 @app.route('/main1')
 def main1():
     return render_template('main1.html')
+
 
 @app.route('/')
 @app.route('/index')
@@ -37,7 +42,7 @@ def index():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('recomendation'))
-    
+
     if request.method == 'POST':
         username = request.form['Username']
         password = request.form['Password']
@@ -45,10 +50,10 @@ def login():
         if user is None or not user.check_password(password):
             flash('Invalid username or password')
             return redirect(url_for('login'))
-        
+
         login_user(user, remember=False)
-        next_page = request.args.get('next', url_for('recomendation'))       
-        if not next_page or urlsplit(next_page).netloc!= '':
+        next_page = request.args.get('next', url_for('recomendation'))
+        if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('recomendation')
         return redirect(next_page)
     return render_template('login.html', title='Login')
@@ -64,7 +69,7 @@ def logout():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-    
+
     if request.method == 'POST':
         username = request.form.get('Username')
         email = request.form.get('Email')
@@ -74,19 +79,19 @@ def register():
         if not username or not password or not repeat_password or not email:
             flash('All fields are required')
             return redirect(url_for('register'))
-        
-        if password!= repeat_password:
+
+        if password != repeat_password:
             flash('Passwords do not match')
             return redirect(url_for('register'))
-        
+
         if db.session.scalar(sa.select(User).where(User.username == username)):
             flash('Username already exists')
             return redirect(url_for('register'))
-        
+
         if db.session.scalar(sa.select(User).where(User.email == email)):
             flash('Email already exists')
             return redirect(url_for('register'))
-        
+
         new_user = User(username=username, email=email)
         new_user.set_password(password)
         db.session.add(new_user)
@@ -94,7 +99,7 @@ def register():
 
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
-    
+
     return render_template('registration.html', title='Register')
 
 
@@ -110,7 +115,7 @@ def add_to_favorites():
     # Обработка каждого фильма в списке
     for data in movie_data:
         existing_movie = FavoriteMovie.query.filter_by(
-            user_id=current_user.id, 
+            user_id=current_user.id,
             name=data['name']
         ).first()
 
@@ -120,6 +125,7 @@ def add_to_favorites():
             continue
 
         movie = FavoriteMovie(
+            kp_id=data['id'],
             name=data['name'],
             description=data['description'],
             shortDescription=data['shortDescription'],
@@ -146,7 +152,7 @@ def get_favorites():
     favorites = db.session.query(FavoriteMovie).filter_by(user_id=current_user.id).all()
     return jsonify([
         {
-            'id': favorite.id,
+            'id': favorite.kp_id,
             'name': favorite.name,
             'description': favorite.description,
             'shortDescription': favorite.shortDescription,
@@ -172,7 +178,7 @@ def save_preferences_from_url():
 
     if not url:
         return jsonify({'error': 'No URL provided'}), 400
-    
+
     query_params = parse_qs(urlsplit(url).query)
 
     release_years_start = ','.join(query_params.get('releaseYears.start', []))
@@ -182,7 +188,7 @@ def save_preferences_from_url():
     if not user_preference:
         user_preference = UserPreference(user_id=current_user.id)
         db.session.add(user_preference)
-    
+
     user_preference.genres = genres
     user_preference.countries = countries
     user_preference.releaseYearsStart = release_years_start
@@ -199,8 +205,7 @@ def get_preferences():
     user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
     if not user_preference:
         return jsonify({'error': 'User prefencts not found'}), 404
-    
-   
+
     genres = user_preference.genres.split(', ') if user_preference.genres else []
     countries = user_preference.countries.split(', ') if user_preference.countries else []
     release_years_start = user_preference.releaseYearsStart.split(', ') if user_preference.countries else []
@@ -217,7 +222,7 @@ def delete_from_favorites():
     if not movie_id:
         return jsonify({'error': 'No movie id provided'}), 400
 
-    movie = FavoriteMovie.query.filter_by(id=movie_id, user_id=current_user.id).first()
+    movie = FavoriteMovie.query.filter_by(kp_id=int(movie_id), user_id=current_user.id).first()
 
     if not movie:
         return jsonify({'error': 'Movie not found'}), 404
@@ -237,14 +242,29 @@ def add_rate():
 
     if not movie_name or not rate:
         return jsonify({'error': 'No movie id or rate provided'}), 400
-    
+
     movie = RateMovie.query.filter_by(name=movie_name, user_id=current_user.id).first()
     if not movie:
         movie = RateMovie(user_id=current_user.id)
         db.session.add(movie)
-    
+
     movie.rating = rate
     movie.name = movie_name
     db.session.commit()
 
     return jsonify({'message': 'Rate added'}), 200
+
+
+@app.route('/api/rate/<int:movie_name>', methods=['GET'])
+@login_required
+def get_rate(movie_name):
+    movie = RateMovie.query.filter_by(name=movie_name, user_id=current_user.id).first()
+
+    if not movie:
+        return jsonify({'error': 'Нет такого фильма в базе данных'}), 404
+
+    average_rating = db.session.query(func.avg(RateMovie.rating)).filter_by(name=movie_name).scalar()
+    return jsonify({
+        'rate': movie.rating,
+        'average_rate': average_rating
+    })

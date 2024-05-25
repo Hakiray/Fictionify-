@@ -141,8 +141,7 @@ if (document.querySelector('.Genre')){
     console.log(SortingName);
     //запрос на фильмы
     function fetchMovies(){
-        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
-        console.log(API_URL)
+        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;        console.log(API_URL)
         console.log(GenresName);
         fetch(API_URL, options)
             .then(response => response.json())
@@ -163,7 +162,7 @@ if (document.querySelector('.Genre')){
     //прокрутка фильмов
     function ThroughList(){
         if (ImageList.docs.length === 0){
-            i = 0; 
+            i = 0;
             j = 1;
             alert("Фильмы кончились, поменяйте фильтр");
             return;
@@ -219,6 +218,10 @@ if (document.querySelector('.Genre')){
             }
         }
     }
+
+
+    //запрос на фильмы, чтобы с самого начала что-то было
+    fetchMovies();
 
 
     const image = document.querySelector('.Tinder');
@@ -352,7 +355,7 @@ if (document.querySelector('.Genre')){
     });
     });
 
-    // выбор сортировки
+        // выбор сортировки
     let ReleaseSort = [];
     let sortingList = document.querySelectorAll('.Sorting')
 
@@ -516,7 +519,8 @@ if (document.querySelector('.mv_li1')){
     function UpdateMovieCard(id){
         const MovieCardContent = document.querySelector('.selected_movie');
         movie = Liked[id];
-        sigma = movie.name;
+        sigma = movie.id;
+        getfilmark(sigma);
         console.log('eshkere')
         console.log(Liked[id])
         MovieCardContent.innerHTML = '' ;
@@ -527,7 +531,7 @@ if (document.querySelector('.mv_li1')){
     document.addEventListener('DOMContentLoaded', function() {
         // Выбираем родительский элемент, например, <ul>
         const list = document.querySelector('.mv_li1');
-    
+
         list.addEventListener('click', function(event) {
             // Всплываем от цели клика (event.target) вверх по DOM-дереву,
             // чтобы найти ближайшего предка с классом 'like_movie_li'.
@@ -571,23 +575,24 @@ if (document.querySelector('.mv_li1')){
         }
         else{ console.error("Элемент с классом 'movie' не найден.");}
     });
-    
+
     //дальше меню на карточке фильма
 
     //получение внутрисайтовой оценки не надо она будет в списке Liked
-    /*function getfilmark(){
-        fetch('/api/favorites/filmid', {
+    function getfilmark(sigma){
+        fetch(`/api/rate/${sigma}`, {
             method: "GET",
         })
         .then(response => response.json())
         .then(info => {
-            InnerRating = info; 
-            console.log(InnerRating); 
+            InnerRating = info;
+            console.log(InnerRating);
         })
         .catch(error => {
             console.error('Ошибка при получении данных:', error);
         });
-    }*/
+    }
+    getfilmark();
     //оценка
 
     //Добавка класса Open
@@ -633,9 +638,9 @@ if (document.querySelector('.mv_li1')){
         });
     })
 
-    
+
     //нажатие на число оценки
-    let star; 
+    let star;
     document.addEventListener('DOMContentLoaded', function() {
         let selected;
         function resetColors() {
@@ -647,7 +652,7 @@ if (document.querySelector('.mv_li1')){
             // чекаем, что элемент на который нажали это тег p в .rate2
             if (e.target && e.target.nodeName === 'P' && e.target.closest('.rate2')) {
                 resetColors();
-                star = e.target.textContent; 
+                star = e.target.textContent;
                 selected = e.target;
                 if (['1', '2', '3', '4'].includes(star)) {
                     selected.style.color = 'red';
@@ -656,8 +661,8 @@ if (document.querySelector('.mv_li1')){
                 } else if (['7', '8', '9', '10'].includes(star)) {
                     selected.style.color = 'green';
                 }
-                console.log(star);  
-                console.log(sigma);  
+                console.log(star);
+                console.log(sigma);
             }
         });
     });
@@ -687,7 +692,7 @@ if (document.querySelector('.mv_li1')){
         });
     }
 
-    //удаление у пользователя 
+    //удаление у пользователя
     document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
           // Проверяем, что элемент имеет класс delete
@@ -695,12 +700,12 @@ if (document.querySelector('.mv_li1')){
             // Ищем фильм с нужным названием sigma в Liked
             console.log(sigma)
             let index = Liked.findIndex(function(item) {
-                return item.name === sigma;
+                return item.id === sigma;
               });
             fetchUserDel(Liked[index]);// удаляю, отправляю фулл элемент удаляемый
-            console.log(index); 
+            console.log(index);
             Liked = Liked.filter(function(item) {
-                return item.name !== sigma;
+                return item.id !== sigma;
               });
           }
         });

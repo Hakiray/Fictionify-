@@ -46,7 +46,7 @@ async function searchById(id) {
 function CreateMovieElement(movie) {
     const div = document.createElement('div');
     let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
-    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.jpg";
     let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
     let imdb_rating = movie.rating.imdb != '0' ? movie.rating.imdb : 'Нет';
     div.className = 'movie';
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function MovieCard(movie){
     const div = document.createElement('div');
-    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.jpg";
     let country = movie.countries.map(country => country.name).join(', ');
     let genres = movie.genres.map(genre => genre.name).join(', ');
     let directors = movie.persons.filter(i => i.enProfession == 'director'); // режиссеры
