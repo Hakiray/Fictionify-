@@ -15,16 +15,16 @@
                     <form>
                         <div class="LogoutPanel">
                             <img src="{{ url_for('static', filename='user-solid-72.png') }}" class="Icon1">
+                            <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
                             <a href="{{ url_for('logout') }}">  <!-- Ссылка на выход из системы -->
                                 <img src="{{ url_for('static', filename='log-out-regular-72.png') }}" class="Icon2">
                             </a>
-                            <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
                         </div>
                     </form>
                     <nav class="Navigation">
                         <div class="Navigation2">
                             <a href="{{ url_for('liked_movies') }}">
-                                <div class="Heart"><i class='bx bxs-heart bx-lg' ></i></div>
+                                <div class="Heart selected-option"><i class='bx bxs-heart bx-lg' ></i></div>
                             </a>
                             <a href="{{ url_for('search') }}">
                                 <div class="Search"><i class='bx bx-search bx-lg'></i></div>
@@ -42,10 +42,8 @@
                 </aside>
                 <div class="selected_movie">
                     <div class="movie_data">
-                        
                     </div>
                     <div class="movie_panel">
-                        
                     </div>
                 </div>
             </div>
