@@ -14,10 +14,10 @@
                 <form>
                     <div class="LogoutPanel">
                         <img src="{{ url_for('static', filename='user-solid-72.png') }}" class="Icon1">
+                        <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
                         <a href="{{ url_for('logout') }}">  <!-- Ссылка на выход из системы -->
                             <img src="{{ url_for('static', filename='log-out-regular-72.png') }}" class="Icon2">
                         </a>
-                        <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
                     </div>
                 </form>
                 <nav class="Navigation">
@@ -30,7 +30,7 @@
                         </a>
                         <div class="Message"><i class='bx bxs-conversation bx-lg'></i></div>
                         <a href="{{ url_for('main1') }}"> <!-- ссылка на main1.html поменять тут-->
-                            <div class="Movie"><i class='bx bxs-film bx-lg'></i></div>
+                            <div class="Movie selected-option"><i class='bx bxs-film bx-lg'></i></div>
                         </a>
                         <!--убрал-->
                     </div>
@@ -109,10 +109,10 @@
                 </div>
             </aside>
             <span class="MovePicture">
-                <a class="Tinder"><img src="{{ url_for('static', filename='zoo.webp') }}" width="350" height="500" alt=""></a>
-                <i class="MovieName">Зверополис</i>
-                <i class="Description">США 6+ 108 мин.</i>
-                <i class="Rating">8.3</i>
+                <a class="Tinder"><img width="350" height="500" alt=""></a>
+                <i class="MovieName"></i>
+                <i class="Description"></i>
+                <i class="Rating"></i>
             </span>
             <span class="Action">
                 <span class="Heart2">
