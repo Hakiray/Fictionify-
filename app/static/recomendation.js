@@ -104,19 +104,20 @@ GenreList.forEach(function(Genre) {
 });
 });
 
-/*
+
 document.querySelector('.save').addEventListener('click', function(event) {
+    event.preventDefault();
     const url = event.currentTarget.closest('.save-link').getAttribute('href');
     let j = 1;
     // Предполагаем, что api_url - это URL сервера для отправки POST запроса
-    const api_url = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
+    const api_url = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
 
-    fetch(api_url, {
+    fetch('/api/preferences/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(api_url),
+      body: JSON.stringify({url: api_url}),
     }).then(response => {
       if (response.ok) {
         window.location.href = url;
@@ -126,5 +127,5 @@ document.querySelector('.save').addEventListener('click', function(event) {
     }).catch(error => {
       console.error('Error:', error);
     });
-    event.preventDefault();
-  }); */
+    event.reventDefault();
+  }); 
