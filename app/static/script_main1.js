@@ -1,6 +1,48 @@
 
 //let API_KEY = '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN';  
 let API_URL;  
+let StrReleaseCountry = '';
+let StrReleaseDate = '';
+let StrGenreList = '';
+let ReleaseYearsStart;
+let GenresName;
+let CountriesName;
+
+
+function getUserAPI_URL(){
+    fetch('/api/preferences', {
+        method: "GET",
+    })
+    .then(response => response.json())
+    .then(info => {
+        Destroy = info;
+        console.log('adadada');
+        console.log(Destroy);
+
+        StrReleaseDate = Destroy[2][0].split(',');
+        StrReleaseDate = StrReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
+        ReleaseYearsStart = StrReleaseDate !== '' ? `&releaseYears.start=${StrReleaseDate}` : '&releaseYears.start=1874-2050';
+
+        StrReleaseCountry = Destroy[1][0].split(',');
+        StrReleaseCountry = StrReleaseCountry.join('&countries.name=');
+        CountriesName = StrReleaseCountry !== '' ? `&countries.name=${StrReleaseCountry}` : '';
+
+        StrReleaseGenre = Destroy[0][0].split(',');
+        StrReleaseGenre = StrReleaseGenre.join('&genres.name=');
+        GenresName = StrReleaseGenre !== '' ? `&genres.name=${StrReleaseGenre}` : '';
+
+        console.log(GenresName, CountriesName, ReleaseYearsStart);
+        
+        // В этой части кода вы можете вызвать функцию для выполнения запроса на сервер с полученным URL
+        fetchMovies(); // Пример вызова функции для выполнения запроса
+    })
+    .catch(error => {
+        console.error('Ошибка при получении данных:', error);
+    });
+}
+
+getUserAPI_URL(); //Надо будет убрать api_url в
+console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
     headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
@@ -80,16 +122,14 @@ if (document.querySelector('.Genre')){
     let ageRating;
     let resultString;
 
-    let ReleaseYearsStart=localStorage.getItem('Years');
-    let GenresName = localStorage.getItem('Genres');
-    let CountriesName = localStorage.getItem('Countries');
-
+    console.log('dvs')
     console.log(GenresName);
     console.log(ReleaseYearsStart);
     console.log(CountriesName);
     //запрос на фильмы
     function fetchMovies(){
-        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
+        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}`;
+        console.log(API_URL)
         console.log(GenresName);
         fetch(API_URL, options)
             .then(response => response.json())
@@ -209,7 +249,6 @@ if (document.querySelector('.Genre')){
 
     //выбор фильмов по дате выхода
     let ReleaseDate = [];
-    let StrReleaseDate = '';
     let DateList = document.querySelectorAll('.ReleaseDate')
 
     DateList.forEach(function(Date) {
@@ -242,7 +281,6 @@ if (document.querySelector('.Genre')){
 
     //выбор фильмов по стране выхода
     let ReleaseCountry = [];
-    let StrReleaseCountry = '';
     let CountryList = document.querySelectorAll('.Country')
 
     CountryList.forEach(function(Country) {
@@ -275,7 +313,6 @@ if (document.querySelector('.Genre')){
 
     //выбор фильмов по жанру
     let ReleaseGenre = [];
-    let StrGenreList = '';
     let GenreList = document.querySelectorAll('.Genre')
 
     GenreList.forEach(function(Genre) {

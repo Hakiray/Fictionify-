@@ -2,8 +2,8 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User, FavoriteMovie
-from urllib.parse import urlsplit
+from app.models import User, FavoriteMovie, UserPreference
+from urllib.parse import urlsplit, parse_qs
 
 @app.route('/liked_movies')
 def liked_movies():
@@ -15,7 +15,12 @@ def search():
 
 @app.route('/recomendation')
 def recomendation():
-    return render_template('recomendation.html')
+    user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
+    if not user_preference or not user_preference.preferences_chosen:
+        return render_template('recomendation.html')
+    
+    return render_template('main1.html')
+
 
 @app.route('/main1')
 def main1():
@@ -157,3 +162,49 @@ def get_favorites():
         }
         for favorite in favorites
     ])
+
+
+@app.route('/api/preferences/save', methods=['POST'])
+@login_required
+def save_preferences_from_url():
+    data = request.json
+    url = data.get('url', '')
+
+    if not url:
+        return jsonify({'error': 'No URL provided'}), 400
+    
+    query_params = parse_qs(urlsplit(url).query)
+
+    release_years_start = ','.join(query_params.get('releaseYears.start', []))
+    genres = ','.join(query_params.get('genres.name', []))
+    countries = ','.join(query_params.get('countries.name', []))
+    user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
+    if not user_preference:
+        user_preference = UserPreference(user_id=current_user.id)
+        db.session.add(user_preference)
+    
+    user_preference.genres = genres
+    user_preference.countries = countries
+    user_preference.releaseYearsStart = release_years_start
+    user_preference.preferences_chosen = True
+
+    db.session.commit()
+
+    return jsonify({'message': 'Preferences saved'}), 200
+
+
+@app.route('/api/preferences', methods=['GET'])
+@login_required
+def get_preferences():
+    user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
+    if not user_preference:
+        return jsonify({'error': 'User prefencts not found'}), 404
+    
+   
+    genres = user_preference.genres.split(', ') if user_preference.genres else []
+    countries = user_preference.countries.split(', ') if user_preference.countries else []
+    release_years_start = user_preference.releaseYearsStart.split(', ') if user_preference.countries else []
+
+    preferences_list = [genres, countries, release_years_start]
+
+    return jsonify(preferences_list)
