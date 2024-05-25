@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from flask_login import current_user, login_user, logout_user, login_required
 import sqlalchemy as sa
-from app.models import User, FavoriteMovie, UserPreference
+from app.models import User, FavoriteMovie, UserPreference, RateMovie
 from urllib.parse import urlsplit, parse_qs
 
 @app.route('/liked_movies')
@@ -208,3 +208,43 @@ def get_preferences():
     preferences_list = [genres, countries, release_years_start]
 
     return jsonify(preferences_list)
+
+
+@app.route('/api/favorites/delete', methods=['POST'])
+def delete_from_favorites():
+    movie_id = request.json.get('id', None)
+
+    if not movie_id:
+        return jsonify({'error': 'No movie id provided'}), 400
+
+    movie = FavoriteMovie.query.filter_by(id=movie_id, user_id=current_user.id).first()
+
+    if not movie:
+        return jsonify({'error': 'Movie not found'}), 404
+
+    db.session.delete(movie)
+    db.session.commit()
+
+    return jsonify({'message': 'Movie deleted from favorites'}), 200
+
+
+@app.route('/api/rate/add', methods=['POST'])
+@login_required
+def add_rate():
+    data = request.json
+    movie_name = data.get('name', None)
+    rate = data.get('rate', None)
+
+    if not movie_name or not rate:
+        return jsonify({'error': 'No movie id or rate provided'}), 400
+    
+    movie = RateMovie.query.filter_by(name=movie_name, user_id=current_user.id).first()
+    if not movie:
+        movie = RateMovie(user_id=current_user.id)
+        db.session.add(movie)
+    
+    movie.rating = rate
+    movie.name = movie_name
+    db.session.commit()
+
+    return jsonify({'message': 'Rate added'}), 200
