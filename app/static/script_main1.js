@@ -3,7 +3,7 @@
 let API_URL;  
 const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
+    headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
   };
 
 let Liked = []
@@ -316,19 +316,23 @@ if (document.querySelector('.mv_li1')){
     getUserLike();
     function CreateMovieElement(movie){
         const div = document.createElement('div');
+        let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
+        let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.png";
+        let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
+        let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : 'Нет';
         div.className = 'movie';
         //div.id = movie-${movie.id}; надо будет добавить id
         div.id = `${movie.name}`;//надо будет поменять
         div.innerHTML = `
             <div class="like_movie_li">
                 <div class="movie_photo_li">
-                    <img src="${movie.posterUrl}">
+                    <img src="${poster_url}">
                 </div>
                 <div class="movie_describe_li">
-                    <div class="movie_name_li">${movie.name}</div>
-                    <div class="movie_data_li">${movie.releaseStart} ${movie.ageRating}+</div>
+                    <div class="movie_name_li">${movie_name}</div>
+                    <div class="movie_data_li">${movie.releaseStart} ${age_rating}</div>
                     <div class="movie_rating_li">
-                        <img src="../static/star.png"> ${movie.imdb_rating}
+                        <img src="../static/star.png"> ${imdb_rating}
                     </div>
                 </div>
             </div>
@@ -342,7 +346,7 @@ if (document.querySelector('.mv_li1')){
         div.className = 'MovieCard';
         div.id = `${movie.name}`;
         countriesList = movie.countries;
-        //нужно добавить актеров и прочих челиков, imdb rating
+        //нужно добавить актеров и прочих челиков, imdb rating анрил
         div.innerHTML = `
                     <div class="movie_data">
                         <div class="movie_name"><h1>${movie.name}</h1></div>

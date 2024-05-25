@@ -1,7 +1,7 @@
 let API_URL;
 const options = {
     method: 'GET',
-    headers: { accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN' }
+    headers: { accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW' }
 };
 
 var data;
@@ -45,27 +45,26 @@ async function searchById(id) {
 
 function CreateMovieElement(movie) {
     const div = document.createElement('div');
-    let movie_name = movie.name;
+    let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
+    let imdb_rating = movie.rating.imdb != '0' ? movie.rating.imdb : 'Нет';
     div.className = 'movie';
     div.id = movie.id; // надо будет поменять
-    if (movie.name.length > 40) {
-        movie_name = movie.name.slice(0, 40) + '...';
-    }
     div.innerHTML = `
         <div class="like_movie_li">
             <div class="movie_photo_li">
-                <img src="${movie.poster.url}">
+                <img src="${poster_url}">
             </div>
             <div class="movie_describe_li">
                 <div class="movie_name_li">${movie_name}</div>
-                <div class="movie_data_li">${movie.year} ${movie.ageRating}+</div>
+                <div class="movie_data_li">${movie.year} ${age_rating}</div>
                 <div class="movie_rating_li">
-                    <img src="../static/star.png"> ${movie.rating.imdb}
+                    <img src="../static/star.png"> ${imdb_rating}
                 </div>
             </div>
         </div>
     `;
-
     return div;
 }
 
@@ -111,10 +110,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function MovieCard(movie){
     const div = document.createElement('div');
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let country = movie.countries.map(country => country.name).join(', ');
+    let genres = movie.genres.map(genre => genre.name).join(', ');
+    let directors = movie.persons.filter(i => i.enProfession == 'director'); // режиссеры
+    directors = directors.length > 4 ? directors.slice(0, 4) : directors;
+    directors = directors.length == 0 ? "Нет" : directors.map(director => director.name).join(', ')
+    let scenarists = movie.persons.filter(i => i.enProfession == 'scenarist'); // сценаристы
+    scenarists = scenarists.length > 4 ? scenarists.slice(0, 4) : scenarists;
+    scenarists = scenarists.length == 0 ? "Нет" : scenarists.map(scenarist => scenarist.name).join(', ')
+    let producers = movie.persons.filter(i => i.enProfession == 'producer'); // продюсеры
+    producers = producers.length > 4 ? producers.slice(0, 4) : producers;
+    producers = producers.length == 0 ? "Нет" : producers.map(producer => producer.name).join(', ')
+    let designers = movie.persons.filter(i => i.enProfession == 'designer'); // дизайнеры
+    designers = designers.length > 4 ? designers.slice(0, 4) : designers;
+    designers = designers.length == 0 ? "Нет" : designers.map(designer => designer.name).join(', ')
+    let composers = movie.persons.filter(i => i.enProfession == 'composer'); // композиторы
+    composers = composers.length > 4 ? composers.slice(0, 4) : composers;
+    composers = composers.length == 0 ? "Нет" : composers.map(composer => composer.name).join(', ')
     div.className = 'MovieCard';
     div.id = `${movie.id}`;
-    let directors = movie.persons.map(person => person.enProfession == 'director')
-    //нужно добавить актеров и прочих челиков, imdb rating
     div.innerHTML = `
             <div class="movie_data">
                 <div class="movie_name"><h1>${movie.name}</h1></div>
@@ -129,32 +144,32 @@ function MovieCard(movie){
                 <div class="movie_describe">
                     <div class="movie_text">
                         <div class="movie_element">Год производства <strong class="bl">${movie.year}</strong></div>
-                        <div class="movie_element">Страна <strong class="bl">${movie.countries.map(country => country.name).join(', ')}</strong></div>
-                        <div class="movie_element">Жанр <strong class="bl">${movie.genres.map(genre => genre.name).join(', ')}</strong></div>
-                        <div class="movie_element">Режиссер <strong class="bl">${directors.slice(0, directors.length % 4)}</strong></div> 
-                        <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
-                        <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
-                        <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
-                        <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
+                        <div class="movie_element">Страна <strong class="bl">${country}</strong></div>
+                        <div class="movie_element">Жанр <strong class="bl">${genres}</strong></div>
+                        <div class="movie_element">Режиссер <strong class="bl">${directors}</strong></div> 
+                        <div class="movie_element">Сценарий <strong class="bl">${scenarists}</strong></div>
+                        <div class="movie_element">Продюсер <strong class="bl">${producers}</strong></div>
+                        <div class="movie_element">Художник <strong class="bl">${designers}</strong></div>
+                        <div class="movie_element">Композитор <strong class="bl">${composers}</strong></div>
                         <div class="rating_block">
                             <div class="srv_rate">
                                 <img class="logo1" src="../static/kinopoisk-icon-main.png">
-                                <strong class="rate">${movie.rating.kp}</strong>
+                                <strong class="rate">${movie.rating.kp != '0' ? movie.rating.kp : "Нет"}</strong>
                             </div>
                             <div class="srv_rate">
                                 <img class="logo2" src="../static/jopa.png" >
-                                <strong class="rate">${movie.rating.imdb}</strong>
+                                <strong class="rate">${movie.rating.imdb != '0' ? movie.rating.imdb : "Нет"}</strong>
                             </div>
                         </div>
                         <div class="movie_retell">
-                            ${movie.description}
+                            ${movie.description != null ? movie.description : ''}
                         </div>
                     </div>
                 </div>
             </div>
             <div class="movie_panel">
                 <div>
-                    <img class="movie_photo" src="${movie.poster.url}">
+                    <img class="movie_photo" src="${poster_url}">
                 </div>
                 <div class="movie_panel_li">
                     <ul class="mv_li">
@@ -227,4 +242,4 @@ document.addEventListener('DOMContentLoaded', function() {
         //location.reload() //тип убрал и перезагружаю страницу
       }
     });
-  });
+});
