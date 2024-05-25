@@ -33,8 +33,7 @@ function getUserAPI_URL(){
 
         console.log(GenresName, CountriesName, ReleaseYearsStart);
         
-        // В этой части кода вы можете вызвать функцию для выполнения запроса на сервер с полученным URL
-        fetchMovies(); // Пример вызова функции для выполнения запроса
+        fetchMovies();
     })
     .catch(error => {
         console.error('Ошибка при получении данных:', error);
@@ -623,12 +622,12 @@ if (document.querySelector('.mv_li1')){
 
     //запрос на отправку фильма и оценки пользователя нужен будет адрес (отправка оценки и названия фильма)
     function Rate(star, sigma){
-        fetch('/api/favorites/фщфщфщфщфщ', {
+        fetch('/api/rate/add', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify([star, sigma]),
+            body: JSON.stringify({ name: sigma, rate: star }),
         })
         .then(response => {
             if (response.ok) {
@@ -639,6 +638,7 @@ if (document.querySelector('.mv_li1')){
         })
         .then(info => {
             console.log(info);
+            console.log(JSON.stringify({ name: sigma, rate: star }));
         })
         .catch(error => {
             console.error('There was an error:', error);
@@ -660,19 +660,18 @@ if (document.querySelector('.mv_li1')){
             Liked = Liked.filter(function(item) {
                 return item.name !== sigma;
               });
-            //location.reload() //тип убрал и перезагружаю страницу
           }
         });
       });
 
     //запрос на удаление (нужно будет попросить поменять ссылку)
-    function fetchUserDel(Liked){
-        fetch('/api/favorites/фщфщфщфщфщ', {
+    function fetchUserDel(movie){
+        fetch('/api/favorites/delete', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(Liked),
+            body: JSON.stringify({ id: movie.id }),
         })
         .then(response => {
             if (response.ok) {
@@ -683,6 +682,7 @@ if (document.querySelector('.mv_li1')){
         })
         .then(info => {
             console.log(info);
+            location.reload();
         })
         .catch(error => {
             console.error('There was an error:', error);

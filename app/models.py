@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
     favorites: so.WriteOnlyMapped['FavoriteMovie'] = so.relationship(back_populates='author')
     preference: so.WriteOnlyMapped['UserPreference'] = so.relationship(back_populates='author')
+    rate: so.WriteOnlyMapped['RateMovie'] = so.relationship(back_populates='author')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -68,3 +69,12 @@ class UserPreference(db.Model):
     releaseYearsStart: so.Mapped[str] = so.mapped_column(sa.String(500), nullable=True)
     preferences_chosen: so.Mapped[bool] = so.mapped_column(sa.Boolean(500), default=False)
     author: so.Mapped['User'] = so.relationship(back_populates='preference')
+
+
+class RateMovie(db.Model):
+    id: so.Mapped[int] = so.mapped_column(primary_key=True)
+    name: so.Mapped[str] = so.mapped_column(sa.String(120), nullable=True)
+    rating: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
+    user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
+    author: so.Mapped['User'] = so.relationship(back_populates='rate')
+
