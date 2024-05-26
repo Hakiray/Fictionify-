@@ -396,7 +396,8 @@ if (document.querySelector('.mv_li1')){
     getUserLike();
     function CreateMovieElement(movie){
         const div = document.createElement('div');
-        let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
+        console.log(movie);
+        let movie_name = movie.name ? (movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name) : "Нет названия";
         let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.jpg";
         let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
         let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : 'Нет';
