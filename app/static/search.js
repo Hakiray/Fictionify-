@@ -133,14 +133,6 @@ function MovieCard(movie){
     div.innerHTML = `
             <div class="movie_data">
                 <div class="movie_name"><h1>${movie.name}</h1></div>
-                <ul class="switch_menu mv_li">
-                    <li class="select_option">
-                        О фильме
-                    </li>
-                    <li class="select_option">
-                        Рецензии зрителей
-                    </li>
-                </ul>
                 <div class="movie_describe">
                     <div class="movie_text">
                         <div class="movie_element">Год производства <strong class="bl">${movie.year}</strong></div>
@@ -164,6 +156,8 @@ function MovieCard(movie){
                         <div class="movie_retell">
                             ${movie.description != null ? movie.description : ''}
                         </div>
+                        <div class="summary-text movie_element">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -175,8 +169,14 @@ function MovieCard(movie){
                     <ul class="mv_li">
                         <li>
                             <div class="movie_panel_btn willwatch">
-                                <img class="mv_pnl_btn1" src="../static/heart.png"">
+                                <img class="mv_pnl_btn1" src="../static/heart.png">
                                 <div class="btn_name1">Буду смотреть</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="movie_panel_btn">
+                                <img class="mv_pnl_btn1 summary" src="../static/book.png">
+                                <div class="btn_name1">Краткий пересказ</div>
                             </div>
                         </li>
                     </ul>
@@ -238,6 +238,33 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(JSON.stringify([newfilm]));
         fetchUser([newfilm]);
         //location.reload() //тип убрал и перезагружаю страницу
+      }
+    });
+});
+// краткое содержание фильма с поиска через гигачат
+
+async function get_summary(film_name) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/get_summary/${encodeURIComponent(film_name)}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        data = await response.json();
+        console.log(data);
+        const text_summary = document.querySelector('.summary-text');
+        text_summary.innerHTML = `<div class="big"><strong class="bl">Краткий пересказ с помощью Gigachat:</strong></div>
+                                  <div class="summary-text">${data.content}</div>`
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+      if (event.target.closest('.summary')) {
+          let movie_data = newfilm.name + '~' + newfilm.year + '~' + newfilm.genres[0];
+          get_summary(movie_data);
       }
     });
 });

@@ -360,6 +360,12 @@ header{
     margin-top: 6px;
 }
 
+.btn_name1 {
+    font-size: 20px;
+    margin-left: 5px;
+    user-select: none;
+}
+
 .rating_block {
     display: flex;
     align-items: flex-start;
@@ -398,6 +404,10 @@ header{
 .select_option {
     color: gray;
     font-size: 25px;
+}
+
+.summary-text {
+    margin-top: 5px;
 }
 
 .movie_describe {

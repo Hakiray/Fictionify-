@@ -1,10 +1,13 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from flask_login import current_user, login_user, logout_user, login_required
+from app.gigachat_api import get_token
 import sqlalchemy as sa
 from app.models import User, FavoriteMovie, UserPreference, RateMovie
 from urllib.parse import urlsplit, parse_qs
 from sqlalchemy import func
+import requests
+import json
 
 
 @app.route('/liked_movies')
@@ -284,3 +287,40 @@ def get_rate(movie_name):
         'rate': movie.rating,
         'average_rate': average_rating
     })
+
+
+@app.route('/api/get_summary/<string:movie_data>', methods=['GET'])
+@login_required
+def film_summary(movie_data):
+    movie_data = movie_data.split('~')
+    movie_name = movie_data[0]
+    movie_year = movie_data[1]
+    movie_genre = movie_data[2]
+    token = get_token()
+    url = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions"
+    payload = json.dumps({
+        "model": "GigaChat",
+        "messages": [
+            {
+                "role": "system",
+                "content": "Ты — разбираешься в фильмах и аниме и поэтому можешь сделать их краткий пересказ в 100 слов."
+            },
+            {
+                "role": "user",
+                "content": f'Название: {movie_name}; Год выхода: {movie_year}; Жанр: {movie_genre};'
+            }
+        ],
+        "temperature": 1,
+        "top_p": 0.1,
+        "n": 1,
+        "stream": False,
+        "max_tokens": 512,
+        "repetition_penalty": 1
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    response = requests.post(url=url, headers=headers, data=payload, verify='').json()
+    return response["choices"][0]["message"]
