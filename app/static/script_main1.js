@@ -57,7 +57,7 @@ getUserAPI_URL(); //Надо будет убрать api_url в
 console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'X-API-KEY': '6EYB3EZ-6JD4Y60-PM5SHWP-BECR3SE'}
+    headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
   };
 
 let Liked = []
@@ -160,6 +160,9 @@ if (document.querySelector('.Genre')){
 
 
     //прокрутка фильмов
+    const div = document.createElement('div');
+    div.className = 'modal0';
+    div.id = "my-modal0"
     function ThroughList(){
         if (ImageList.docs.length === 0){
             i = 0;
@@ -177,6 +180,7 @@ if (document.querySelector('.Genre')){
                 image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
                 MovieName.textContent = `${ImageList.docs[i].name}`;
                 countriesList = ImageList.docs[i].countries.map(country => country.name);
+                genreslist = ImageList.docs[i].genres.map(genre => genre.name);
                 ageRating = `${ImageList.docs[i].ageRating}+`;
                 relYear = `${ImageList.docs[i].releaseYears[0].start}`
                 if (ageRating ==='null+'){
@@ -184,8 +188,48 @@ if (document.querySelector('.Genre')){
                 }else{
                     resultString = `${countriesList.slice(0, 2).join(", ")}, ${ageRating}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
                 }
+                console.log(countriesList);
                 Description.textContent = `${resultString}`;
                 Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
+                kp_rating = `${(ImageList.docs[i].rating.kp).toFixed(1)}`
+                imdb_rating = `${(ImageList.docs[i].rating.imdb).toFixed(1)}`
+                console.log(div.className)
+                div.innerHTML = `<div class="modal_box0">
+                                    <button class=modal_close_btn id="close-my-modal-btn">
+                                        <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M2.09082 0.03125L22.9999 22.0294L20.909 24.2292L-8.73579e-05 2.23106L2.09082 0.03125Z" fill="#333333"></path>
+                                            <path d="M0 22.0295L20.9091 0.0314368L23 2.23125L2.09091 24.2294L0 22.0295Z" fill="#333333"></path>
+                                        </svg>
+                                    </button>
+                                    <div class="movie_data">
+                                    <div class="movie_name"><h1>${ImageList.docs[i].name}</h1></div>
+                                    <div class="movie_describe">
+                                        <div class="movie_text">
+                                            <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].releaseYears[0].start}</strong></div>
+                                            <div class="movie_element">Страна <strong class="bl">${countriesList.join(", ")}</strong></div>
+                                            <div class="movie_element">Жанр <strong class="bl">${genreslist.join(", ")}</strong></div>
+                                            <div class="rating_block">
+                                                <div class="srv_rate">
+                                                    <img class="logo1" src="../static/kinopoisk-icon-main.png">
+                                                    <strong class="rate">${kp_rating}</strong>
+                                                </div>
+                                                <div class="srv_rate">
+                                                    <img class="logo2" src="../static/jopa.png" >
+                                                    <strong class="rate">${imdb_rating}</strong>
+                                                </div>
+                                            </div>
+                                            <div class="movie_retell">
+                                                ${ImageList.docs[i].description}
+                                            </div>
+                                            <div class="movie_panel1">
+                                                <div>
+                                                    <img class="movie_photo0" src="${ImageList.docs[i].poster.url}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>`
+                document.body.appendChild(div);
                 i += 1;
                 console.log(i);
             }else{
@@ -197,6 +241,7 @@ if (document.querySelector('.Genre')){
             image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
             MovieName.textContent = `${ImageList.docs[i].name}`;
             countriesList = ImageList.docs[i].countries.map(country => country.name);
+            genreslist = ImageList.docs[i].genres.map(genre => genre.name);
             ageRating = `${ImageList.docs[i].ageRating}+`;
             relYear = `${ImageList.docs[i].releaseYears[0].start}`
             if (ageRating ==='null+'){
@@ -207,6 +252,45 @@ if (document.querySelector('.Genre')){
             console.log(countriesList);
             Description.textContent = `${resultString}`;
             Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
+            kp_rating = `${(ImageList.docs[i].rating.kp).toFixed(1)}`
+            imdb_rating = `${(ImageList.docs[i].rating.imdb).toFixed(1)}`
+            console.log(div.className)
+            div.innerHTML = `<div class="modal_box0">
+                                <button class=modal_close_btn id="close-my-modal-btn">
+                                    <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.09082 0.03125L22.9999 22.0294L20.909 24.2292L-8.73579e-05 2.23106L2.09082 0.03125Z" fill="#333333"></path>
+                                        <path d="M0 22.0295L20.9091 0.0314368L23 2.23125L2.09091 24.2294L0 22.0295Z" fill="#333333"></path>
+                                    </svg>
+                                </button>
+                                <div class="movie_data">
+                                <div class="movie_name"><h1>${ImageList.docs[i].name}</h1></div>
+                                <div class="movie_describe">
+                                    <div class="movie_text">
+                                        <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].releaseYears[0].start}</strong></div>
+                                        <div class="movie_element">Страна <strong class="bl">${countriesList.join(", ")}</strong></div>
+                                        <div class="movie_element">Жанр <strong class="bl">${genreslist.join(", ")}</strong></div>
+                                        <div class="rating_block">
+                                            <div class="srv_rate">
+                                                <img class="logo1" src="../static/kinopoisk-icon-main.png">
+                                                <strong class="rate">${kp_rating}</strong>
+                                            </div>
+                                            <div class="srv_rate">
+                                                <img class="logo2" src="../static/jopa.png" >
+                                                <strong class="rate">${imdb_rating}</strong>
+                                            </div>
+                                        </div>
+                                        <div class="movie_retell">
+                                            ${ImageList.docs[i].description}
+                                        </div>
+                                        <div class="movie_panel1">
+                                            <div>
+                                                <img class="movie_photo0" src="${ImageList.docs[i].poster.url}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+            document.body.appendChild(div);
             i = (i + 1) % LenOfImageList;
             console.log(i);
         }else{
@@ -219,9 +303,34 @@ if (document.querySelector('.Genre')){
         }
     }
 
-
-    //запрос на фильмы, чтобы с самого начала что-то было
-
+    //модальное окно abkm
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            if(event.target && event.target.className === "Tinder"){
+                var modal = document.getElementById("my-modal0");
+                if (modal) {
+                    modal.classList.add("open");
+                    console.log('eshkere2')
+                } else {
+                    console.error('Element with id "my-modal" not found.');
+                }
+            }
+        });
+    })
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            let closeButton = event.target.closest("#close-my-modal-btn");
+            if(closeButton){
+                var modal = document.getElementById("my-modal0");
+                if (modal) {
+                    modal.classList.remove("open");
+                    console.log('eshkere2')
+                } else {
+                    console.error('Element with id "my-modal" not found.');
+                }
+            }
+        });
+    })
 
     const image = document.querySelector('.Tinder');
     const MovieName = document.querySelector('.MovieName');
@@ -237,23 +346,18 @@ if (document.querySelector('.Genre')){
             fetchUser([Liked[Liked.length-1]]);
         }
     })
-    Like.addEventListener('click', ThroughList);
+    Like.addEventListener('click', () => {
+        div.innerHTML=``;
+        ThroughList();
+    });
 
     //нажатие на крестик
     let Skip = document.querySelector('.Cross');
-    Skip.addEventListener('click', ThroughList);
-
-    //нажатие на закладку
-    let Mark = document.querySelector('.Add');
-    let Marked = []
-    Mark.addEventListener('click', () =>{
-        if (!Marked.some(item => item.name === ImageList.docs[i-1].name)) {
-            Marked.push(ImageList.docs[i-1]);
-            console.log(JSON.stringify(Marked));
-        }
-    })
-    Mark.addEventListener('click', ThroughList);
-
+    Skip.addEventListener('click', () => {
+        div.innerHTML=``;
+        ThroughList();
+    });
+    
 
 
     //Это надо для recomendation.html
@@ -564,18 +668,15 @@ if (document.querySelector('.mv_li1')){
         const list = document.querySelector('.mv_li1');
 
         list.addEventListener('click', function(event) {
-            // Всплываем от цели клика (event.target) вверх по DOM-дереву,
-            // чтобы найти ближайшего предка с классом 'like_movie_li'.
+            // ищем ближайшего предка с классом 'like_movie_li'.
             let target = event.target;
             while (target != this) {
                 if (target.classList.contains('like_movie_li')) {
-                    // Сброс фона всех элементов.
+
                     document.querySelectorAll('.like_movie_li').forEach(function(el) {
                         el.style.background = '';
                     });
-                    // Установка фона для целевого элемента.
                     target.style.background = 'white';
-                    // Выходим из цикла, так как нашли нужный элемент.
                     break;
                 }
                 // Перемещаемся к следующему родительскому элементу.
@@ -596,8 +697,8 @@ if (document.querySelector('.mv_li1')){
                 let movieId = movieElement.id;
                 console.log('Нажат фильм с ID:', movieId);
                 for (let i = 0; i < Liked.length; i++) {
-                    if (`${Liked[i].id}` === movieId) { // Убеждаемся, что используем строки для сравнения
-                        UpdateMovieCard(i); // Передаем индекс найденного элемента
+                    if (`${Liked[i].id}` === movieId) { 
+                        UpdateMovieCard(i); 
                         break;
                     }
                 }
@@ -607,6 +708,8 @@ if (document.querySelector('.mv_li1')){
         else{ console.error("Элемент с классом 'movie' не найден.");}
     });
 
+
+
     //дальше меню на карточке фильма
 
 
@@ -614,17 +717,18 @@ if (document.querySelector('.mv_li1')){
         return fetch(`/api/rate/${sigma}`, {
             method: "GET",
         })
-        .then(response => response.json()) // Преобразуем ответ в JSON
+        .then(response => response.json()) 
         .then(info => {
             console.log(info);
-            return info; // Возвращаем данные для дальнейшего использования.
+            return info; 
         })
         .catch(error => {
             console.error('Ошибка при получении данных:', error);
         });
     }
-    //оценка
 
+
+    //оценка
     //Добавка класса Open
     document.addEventListener('DOMContentLoaded', function(){
         document.body.addEventListener("click", function(event){
@@ -655,6 +759,8 @@ if (document.querySelector('.mv_li1')){
             }
         });
     })
+
+
     //отправка на серв по клику
     document.addEventListener('DOMContentLoaded', function(){
         document.body.addEventListener("click", function(event){

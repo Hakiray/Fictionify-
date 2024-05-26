@@ -1,7 +1,7 @@
 let API_URL;
 const options = {
     method: 'GET',
-    headers: { accept: 'application/json', 'X-API-KEY': '6EYB3EZ-6JD4Y60-PM5SHWP-BECR3SE' }
+    headers: { accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN' }
 };
 
 var data;
@@ -234,11 +234,9 @@ function fetchUser(Liked){
 //сохраняем новый фильм с поиска
 document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
-      // Проверяем, что элемент имеет класс delete
       if (event.target.closest('.willwatch')) {
-        // Ищем фильм с нужным названием sigma в Liked
         console.log(JSON.stringify([newfilm]));
-        fetchUser([newfilm]);// удаляю, отправляю фулл элемент удаляемый
+        fetchUser([newfilm]);
         //location.reload() //тип убрал и перезагружаю страницу
       }
     });
