@@ -119,7 +119,7 @@ def add_to_favorites():
     for data in movie_data:
         existing_movie = FavoriteMovie.query.filter_by(
             user_id=current_user.id,
-            name=data['name']
+            kp_id=data['id']
         ).first()
 
         if existing_movie:
