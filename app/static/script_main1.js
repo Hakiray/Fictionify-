@@ -58,12 +58,9 @@ getUserAPI_URL(); //Надо будет убрать api_url в
 console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
-<<<<<<< HEAD
     headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
-=======
-    headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
->>>>>>> gigachat-3
-  };
+}
+
 
 let Liked = []
 
