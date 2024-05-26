@@ -455,24 +455,11 @@ if (document.querySelector('.mv_li1')){
         div.innerHTML = `
                     <div class="movie_data">
                         <div class="movie_name"><h1>${movie.name}</h1></div>
-                        <ul class="switch_menu mv_li">
-                            <li class="select_option">
-                                О фильме
-                            </li>
-                            <li class="select_option">
-                                Рецензии зрителей
-                            </li>
-                        </ul>
                         <div class="movie_describe">
                             <div class="movie_text">
                                 <div class="movie_element">Год производства <strong class="bl">${movie.releaseStart}</strong></div>
                                 <div class="movie_element">Страна <strong class="bl">${countriesList}</strong></div>
                                 <div class="movie_element">Жанр <strong class="bl">${movie.genres}</strong></div>
-                                <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div> 
-                                <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
-                                <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
-                                <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
-                                <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
                                 <div class="rating_block">
                                     <div class="srv_rate">
                                         <img class="logo1" src="../static/kinopoisk-icon-main.png">
