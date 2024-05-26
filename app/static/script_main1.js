@@ -498,9 +498,9 @@ if (document.querySelector('.mv_li1')){
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="movie_panel_btn ratte">
+                                    <div class="movie_panel_btn ratte" id="open-modal-btn">
                                         <img class="mv_pnl_btn" src="../static/star.png" }}">
-                                        <div class="btn_name" id="open-modal-btn">Оценить</div>
+                                        <div class="btn_name">Оценить</div>
                                     </div>
                                     <div class="YourMark">
                                         <p class="YourMark1">Ваша оценка</p>
