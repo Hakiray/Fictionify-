@@ -174,8 +174,8 @@ function MovieCard(movie){
                             </div>
                         </li>
                         <li>
-                            <div class="movie_panel_btn">
-                                <img class="mv_pnl_btn1 summary" src="../static/book.png">
+                            <div class="movie_panel_btn summary">
+                                <img class="mv_pnl_btn1" src="../static/book.png">
                                 <div class="btn_name1">Краткий пересказ</div>
                             </div>
                         </li>

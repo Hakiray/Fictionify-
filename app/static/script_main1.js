@@ -8,6 +8,7 @@ let ReleaseYearsStart;
 let GenresName;
 let CountriesName;
 let SortingName = '';
+let film_id_gigachat = '11621';
 
 
 function getUserAPI_URL(){
@@ -57,7 +58,11 @@ getUserAPI_URL(); //Надо будет убрать api_url в
 console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
+<<<<<<< HEAD
     headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
+=======
+    headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
+>>>>>>> gigachat-3
   };
 
 let Liked = []
@@ -141,7 +146,7 @@ if (document.querySelector('.Genre')){
     console.log(SortingName);
     //запрос на фильмы
     function fetchMovies(){
-        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;        console.log(API_URL)
+        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
         console.log(GenresName);
         fetch(API_URL, options)
             .then(response => response.json())
@@ -560,7 +565,6 @@ if (document.querySelector('.mv_li1')){
         InnerRating.average_rate = InnerRating.average_rate != "0" ? InnerRating.average_rate : "Нет"
         InnerRating.rate = InnerRating.rate != "0" ? InnerRating.rate : ""
         countriesList = movie.countries;
-        //нужно добавить актеров и прочих челиков, imdb rating анрил
         div.innerHTML = `
                     <div class="movie_data">
                         <div class="movie_name"><h1>${movie.name}</h1></div>
@@ -602,9 +606,9 @@ if (document.querySelector('.mv_li1')){
                                     </div>
                                 </li>
                                 <li>
-                                    <div class="movie_panel_btn ratte">
+                                    <div class="movie_panel_btn ratte" id="open-modal-btn">
                                         <img class="mv_pnl_btn" src="../static/star.png" }}">
-                                        <div class="btn_name" id="open-modal-btn">Оценить</div>
+                                        <div class="btn_name">Оценить</div>
                                     </div>
                                     <div class="YourMark">
                                         <p class="YourMark1">Ваша оценка</p>
@@ -882,5 +886,12 @@ if (document.querySelector('.mv_li1')){
             console.error('There was an error:', error);
         });
     }
-
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+      if (event.target.closest('.gigachat_btn')) {
+          get_film_name();
+      }
+    });
+});
