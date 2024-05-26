@@ -189,6 +189,44 @@ def get_favorites():
     ])
 
 
+@app.route('/api/gigachat_film', methods=['GET'])
+def get_gigachat_film():
+    favorites = db.session.query(FavoriteMovie).filter_by(user_id=current_user.id).all()
+    film_names = ', '.join([film.name for film in favorites])
+    token = get_token()
+    print(film_names)
+    url = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions"
+    payload = json.dumps({
+        "model": "GigaChat",
+        "messages": [
+            {
+                "role": "system",
+                "content": "Тебе будет даны названия фильмов, порекомендуй ТОЛЬКО ОДИН похожий фильм "
+                           "2008-2024 года выпуска. Выдай ТОЛЬКО ОДНО его название с сайта Кинопоиск. "
+                           "Не давай названия фильмов, которые мы тебе передали."
+            },
+            {
+                "role": "user",
+                "content": film_names
+            }
+        ],
+        "temperature": 1,
+        "top_p": 0.1,
+        "n": 1,
+        "stream": False,
+        "max_tokens": 512,
+        "repetition_penalty": 1
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': f'Bearer {token}'
+    }
+    response = requests.post(url=url, headers=headers, data=payload, verify='').json()
+    return response["choices"][0]["message"]
+
+
+
 @app.route('/api/preferences/save', methods=['POST'])
 @login_required
 def save_preferences_from_url():
