@@ -475,6 +475,10 @@ if (document.querySelector('.mv_li1')){
                                         <img class="logo3" src="../static/logo.png">
                                         <strong class="rate">${InnerRating.average_rate}</strong>
                                     </div>
+                                    <div>
+                                        <img class="logo3" src="../static/logo.png">
+                                        <strong class="rate">${InnerRating.average_rate}</strong>
+                                    </div>
                                 </div>
                                 <div class="movie_retell">
                                     ${movie.description}
