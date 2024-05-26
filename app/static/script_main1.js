@@ -185,7 +185,7 @@ if (document.querySelector('.Genre')){
                     resultString = `${countriesList.slice(0, 2).join(", ")}, ${ageRating}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
                 }
                 Description.textContent = `${resultString}`;
-                Rating.textContent = `${parseFloat(ImageList.docs[i].rating.kp).toFixed(1)}`;
+                Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
                 i += 1;
                 console.log(i);
             }else{
@@ -206,7 +206,7 @@ if (document.querySelector('.Genre')){
             }
             console.log(countriesList);
             Description.textContent = `${resultString}`;
-            Rating.textContent = `${parseFloat(ImageList.docs[i].rating.kp).toFixed(1)}`;
+            Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
             i = (i + 1) % LenOfImageList;
             console.log(i);
         }else{
@@ -221,7 +221,6 @@ if (document.querySelector('.Genre')){
 
 
     //запрос на фильмы, чтобы с самого начала что-то было
-    fetchMovies();
 
 
     const image = document.querySelector('.Tinder');
@@ -398,7 +397,7 @@ if (document.querySelector('.mv_li1')){
     function CreateMovieElement(movie){
         const div = document.createElement('div');
         let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
-        let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.png";
+        let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.jpg";
         let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
         let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : 'Нет';
         div.className = 'movie';
@@ -426,37 +425,27 @@ if (document.querySelector('.mv_li1')){
         const div = document.createElement('div');
         div.className = 'MovieCard';
         div.id = `${movie.name}`;
+        let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.jpg";
+        let kp_rating = movie.kp_rating != '0' ?  movie.kp_rating : "Нет";
+        let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : "Нет";
         countriesList = movie.countries;
         //нужно добавить актеров и прочих челиков, imdb rating анрил
         div.innerHTML = `
                     <div class="movie_data">
                         <div class="movie_name"><h1>${movie.name}</h1></div>
-                        <ul class="switch_menu mv_li">
-                            <li class="select_option">
-                                О фильме
-                            </li>
-                            <li class="select_option">
-                                Рецензии зрителей
-                            </li>
-                        </ul>
                         <div class="movie_describe">
                             <div class="movie_text">
                                 <div class="movie_element">Год производства <strong class="bl">${movie.releaseStart}</strong></div>
                                 <div class="movie_element">Страна <strong class="bl">${countriesList}</strong></div>
                                 <div class="movie_element">Жанр <strong class="bl">${movie.genres}</strong></div>
-                                <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div> 
-                                <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
-                                <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
-                                <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
-                                <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
                                 <div class="rating_block">
                                     <div class="srv_rate">
                                         <img class="logo1" src="../static/kinopoisk-icon-main.png">
-                                        <strong class="rate">${movie.kp_rating}</strong>
+                                        <strong class="rate">${kp_rating}</strong>
                                     </div>
                                     <div class="srv_rate">
                                         <img class="logo2" src="../static/jopa.png" >
-                                        <strong class="rate">${movie.imdb_rating}</strong>
+                                        <strong class="rate">${imdb_rating}</strong>
                                     </div>
                                 </div>
                                 <div class="movie_retell">
@@ -467,7 +456,7 @@ if (document.querySelector('.mv_li1')){
                     </div>
                     <div class="movie_panel">
                         <div>
-                            <img class="movie_photo" src="${movie.posterUrl}">
+                            <img class="movie_photo" src="${poster_url}">
                         </div>
                         <div class="movie_panel_li">
                             <ul class="mv_li">
