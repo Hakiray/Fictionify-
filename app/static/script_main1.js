@@ -402,7 +402,7 @@ if (document.querySelector('.mv_li1')){
         let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : 'Нет';
         div.className = 'movie';
         //div.id = movie-${movie.id}; надо будет добавить id
-        div.id = `${movie.name}`;//надо будет поменять
+        div.id = `${movie.id}`;//надо будет поменять
         div.innerHTML = `
             <div class="like_movie_li">
                 <div class="movie_photo_li">
@@ -448,10 +448,12 @@ if (document.querySelector('.mv_li1')){
         console.log(movie.name);
         const div = document.createElement('div');
         div.className = 'MovieCard';
-        div.id = `${movie.name}`;
+        div.id = `${movie.id}`;
         let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.jpg";
         let kp_rating = movie.kp_rating != '0' ?  movie.kp_rating : "Нет";
         let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : "Нет";
+        InnerRating.average_rate = InnerRating.average_rate != "0" ? InnerRating.average_rate : "Нет"
+        InnerRating.rate = InnerRating.rate != "0" ? InnerRating.rate : ""
         countriesList = movie.countries;
         //нужно добавить актеров и прочих челиков, imdb rating анрил
         div.innerHTML = `
@@ -473,11 +475,7 @@ if (document.querySelector('.mv_li1')){
                                     </div>
                                     <div>
                                         <img class="logo3" src="../static/logo.png">
-                                        <strong class="rate">${InnerRating.average_rate}</strong>
-                                    </div>
-                                    <div>
-                                        <img class="logo3" src="../static/logo.png">
-                                        <strong class="rate">${InnerRating.average_rate}</strong>
+                                        <strong class="rate0">${InnerRating.average_rate}</strong>
                                     </div>
                                 </div>
                                 <div class="movie_retell">
@@ -597,7 +595,7 @@ if (document.querySelector('.mv_li1')){
                 let movieId = movieElement.id;
                 console.log('Нажат фильм с ID:', movieId);
                 for (let i = 0; i < Liked.length; i++) {
-                    if (`${Liked[i].name}` === movieId) { // Убеждаемся, что используем строки для сравнения
+                    if (`${Liked[i].id}` === movieId) { // Убеждаемся, что используем строки для сравнения
                         UpdateMovieCard(i); // Передаем индекс найденного элемента
                         break;
                     }
@@ -661,15 +659,22 @@ if (document.querySelector('.mv_li1')){
         document.body.addEventListener("click", function(event){
             let closeButton = event.target.closest(".send");
             if(closeButton && star !== 11){
-                Rate(star, sigma);
-                const ratingElement = document.querySelector('.innerrating');
-                ratingElement.textContent = star; 
-                console.log('success');
-            }else if(closeButton && star ===11){
+                Rate(star, sigma, function() {
+                    const ratingElement = document.querySelector('.innerrating');
+                    ratingElement.textContent = star; 
+                    console.log('success');
+                    getfilmark(sigma).then(InnerRating => {
+                        console.log('eshkere');
+                        console.log(InnerRating);
+                        websiterating = document.querySelector('.rate0');
+                        websiterating.textContent = InnerRating.average_rate.toFixed(1);;
+                    });
+                });
+            } else if(closeButton && star === 11){
                 alert('поставьте оценку фильму');
             }
         });
-    })
+    });
 
 
     //нажатие на число оценки
@@ -701,7 +706,7 @@ if (document.querySelector('.mv_li1')){
     });
 
     //запрос на отправку фильма и оценки пользователя нужен будет адрес (отправка оценки и названия фильма)
-    function Rate(star, sigma){
+    function Rate(star, sigma, callback){
         fetch('/api/rate/add', {
             method: "POST",
             headers: {
@@ -719,6 +724,9 @@ if (document.querySelector('.mv_li1')){
         .then(info => {
             console.log(info);
             console.log(JSON.stringify({ name: sigma, rate: star }));
+            if(callback) {
+                callback(info); // Вызываем колбэк с результатом
+            }
         })
         .catch(error => {
             console.error('There was an error:', error);

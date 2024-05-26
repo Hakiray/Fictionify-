@@ -405,7 +405,11 @@ header{
     color: #4cad5e;
     padding-left: 10px;
 }
-
+.rate0 {
+    font-size: 40px;
+    color: #4cad5e;
+    padding-left: 10px;
+}
 
 /*конец*/
 /*Свайп картинок, позиция эя*/
