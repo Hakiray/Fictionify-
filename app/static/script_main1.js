@@ -420,8 +420,32 @@ if (document.querySelector('.mv_li1')){
     `/*<div class="movie_data_li">${movie.releaseStart} ${movie.movieLength} ${movie.ageRating}</div>*/
         return div
     }
-    function MovieCard(movie){
+
+
+
+    /*  
+    <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div> 
+    <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
+    <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
+    <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
+    <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
+    После  <div class="movie_name"><h1>${movie.name}</h1></div>
+    <ul class="switch_menu mv_li">
+        <li class="select_option">
+            О фильме
+        </li>
+        <li class="select_option">
+            Рецензии зрителей
+        </li>
+    </ul>
+    */
+    function MovieCard(movie, InnerRating){
         console.log('ss');
+        if (InnerRating.error === "Нет такого фильма в базе данных"){
+            InnerRating = {average_rate: 0, rate: 0};
+        }
+        console.log(sigma);
+        console.log(InnerRating);
         console.log(movie.name);
         const div = document.createElement('div');
         div.className = 'MovieCard';
@@ -431,24 +455,11 @@ if (document.querySelector('.mv_li1')){
         div.innerHTML = `
                     <div class="movie_data">
                         <div class="movie_name"><h1>${movie.name}</h1></div>
-                        <ul class="switch_menu mv_li">
-                            <li class="select_option">
-                                О фильме
-                            </li>
-                            <li class="select_option">
-                                Рецензии зрителей
-                            </li>
-                        </ul>
                         <div class="movie_describe">
                             <div class="movie_text">
                                 <div class="movie_element">Год производства <strong class="bl">${movie.releaseStart}</strong></div>
                                 <div class="movie_element">Страна <strong class="bl">${countriesList}</strong></div>
                                 <div class="movie_element">Жанр <strong class="bl">${movie.genres}</strong></div>
-                                <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div> 
-                                <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
-                                <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
-                                <div class="movie_element">Художник <strong class="bl">Бет Микл, Кристофер Тандон, Эрин Бенач</strong></div>
-                                <div class="movie_element">Композитор <strong class="bl">Клифф Мартинес</strong></div>
                                 <div class="rating_block">
                                     <div class="srv_rate">
                                         <img class="logo1" src="../static/kinopoisk-icon-main.png">
@@ -457,6 +468,10 @@ if (document.querySelector('.mv_li1')){
                                     <div class="srv_rate">
                                         <img class="logo2" src="../static/jopa.png" >
                                         <strong class="rate">${movie.imdb_rating}</strong>
+                                    </div>
+                                    <div>
+                                        <img class="logo3" src="../static/logo.png">
+                                        <strong class="rate">${InnerRating.average_rate}</strong>
                                     </div>
                                 </div>
                                 <div class="movie_retell">
@@ -482,6 +497,13 @@ if (document.querySelector('.mv_li1')){
                                         <img class="mv_pnl_btn" src="../static/star.png" }}">
                                         <div class="btn_name" id="open-modal-btn">Оценить</div>
                                     </div>
+                                    <div class="YourMark">
+                                        <p class="YourMark1">Ваша оценка</p>
+                                        <div class="value">
+                                            <img class="mv_mrk_btn" src="../static/star.png" }}">
+                                            <p class="innerrating">${InnerRating.rate}</p>
+                                        </div>
+                                    </div>
                                     <div class="modal" id="my-modal">
                                         <div class="modal_box">
                                             <button type="button" class="modal_close_btn" id="close-my-modal-btn">
@@ -506,6 +528,7 @@ if (document.querySelector('.mv_li1')){
                                             <div class="send">
                                                 <p>Сохранить</p>
                                             </div>
+
                                         </div>
                                     </div>
                                 </li>
@@ -518,13 +541,16 @@ if (document.querySelector('.mv_li1')){
     let sigma;  //хранение текущего названия фильма
     function UpdateMovieCard(id){
         const MovieCardContent = document.querySelector('.selected_movie');
-        movie = Liked[id];
+        const movie = Liked[id]; // Убедитесь, что переменные объявлены корректно
         sigma = movie.id;
-        getfilmark(sigma);
-        console.log('eshkere')
-        console.log(Liked[id])
-        MovieCardContent.innerHTML = '' ;
-        MovieCardContent.appendChild(MovieCard(movie))
+        console.log(sigma, 'eesssa')
+        getfilmark(sigma).then(InnerRating => {
+            console.log('eshkere');
+            console.log(Liked[id]);
+            MovieCardContent.innerHTML = '';
+            // Мы передаём InnerRating в MovieCard, потому что он был возвращён из getfilmark
+            MovieCardContent.appendChild(MovieCard(movie, InnerRating));
+        });
     }
 
     //нажатие на фильм
@@ -578,21 +604,20 @@ if (document.querySelector('.mv_li1')){
 
     //дальше меню на карточке фильма
 
-    //получение внутрисайтовой оценки не надо она будет в списке Liked
+
     function getfilmark(sigma){
-        fetch(`/api/rate/${sigma}`, {
+        return fetch(`/api/rate/${sigma}`, {
             method: "GET",
         })
-        .then(response => response.json())
+        .then(response => response.json()) // Преобразуем ответ в JSON
         .then(info => {
-            InnerRating = info;
-            console.log(InnerRating);
+            console.log(info);
+            return info; // Возвращаем данные для дальнейшего использования.
         })
         .catch(error => {
             console.error('Ошибка при получении данных:', error);
         });
     }
-    getfilmark();
     //оценка
 
     //Добавка класса Open
@@ -631,6 +656,8 @@ if (document.querySelector('.mv_li1')){
             let closeButton = event.target.closest(".send");
             if(closeButton && star !== 11){
                 Rate(star, sigma);
+                const ratingElement = document.querySelector('.innerrating');
+                ratingElement.textContent = star; 
                 console.log('success');
             }else if(closeButton && star ===11){
                 alert('поставьте оценку фильму');
@@ -698,7 +725,6 @@ if (document.querySelector('.mv_li1')){
           // Проверяем, что элемент имеет класс delete
           if (event.target.closest('.delete')) {
             // Ищем фильм с нужным названием sigma в Liked
-            console.log(sigma)
             let index = Liked.findIndex(function(item) {
                 return item.id === sigma;
               });
