@@ -203,6 +203,10 @@ header{
     border-bottom: 1px solid #aaa;
 }
 
+.gigachat_btn {
+    user-select: none;
+}
+
 .like_movie_li:hover {
     background: white;
 }

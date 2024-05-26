@@ -8,7 +8,14 @@ let ReleaseYearsStart;
 let GenresName;
 let CountriesName;
 let SortingName = '';
-let film_id_gigachat = '11621';
+let film_name_gigachat;
+let i = 0;
+let j = 1;
+let ImageList;
+let LenOfImageList;
+let countriesList;
+let ageRating;
+let resultString;
 
 
 function getUserAPI_URL(){
@@ -58,7 +65,7 @@ getUserAPI_URL(); //Надо будет убрать api_url в
 console.log(GenresName, CountriesName, ReleaseYearsStart); 
 const options = {
     method: 'GET',
-    headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
+    headers: {accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW'}
 }
 
 
@@ -126,16 +133,6 @@ if (document.querySelector('.Genre')){
     }
 
 
-
-
-    let i = 0;
-    let j = 1;
-    let ImageList;
-    let LenOfImageList;
-    let countriesList;
-    let ageRating;
-    let resultString;
-
     console.log('dvs')
     console.log(GenresName);
     console.log(ReleaseYearsStart);
@@ -184,7 +181,7 @@ if (document.querySelector('.Genre')){
                 countriesList = ImageList.docs[i].countries.map(country => country.name);
                 genreslist = ImageList.docs[i].genres.map(genre => genre.name);
                 ageRating = `${ImageList.docs[i].ageRating}+`;
-                relYear = `${ImageList.docs[i].releaseYears[0].start}`
+                relYear = `${ImageList.docs[i].year}`
                 if (ageRating ==='null+'){
                     resultString = `${countriesList.slice(0, 2).join(", ")}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
                 }else{
@@ -207,7 +204,7 @@ if (document.querySelector('.Genre')){
                                     <div class="movie_name"><h1>${ImageList.docs[i].name}</h1></div>
                                     <div class="movie_describe">
                                         <div class="movie_text">
-                                            <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].releaseYears[0].start}</strong></div>
+                                            <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].year}</strong></div>
                                             <div class="movie_element">Страна <strong class="bl">${countriesList.join(", ")}</strong></div>
                                             <div class="movie_element">Жанр <strong class="bl">${genreslist.join(", ")}</strong></div>
                                             <div class="rating_block">
@@ -245,7 +242,7 @@ if (document.querySelector('.Genre')){
             countriesList = ImageList.docs[i].countries.map(country => country.name);
             genreslist = ImageList.docs[i].genres.map(genre => genre.name);
             ageRating = `${ImageList.docs[i].ageRating}+`;
-            relYear = `${ImageList.docs[i].releaseYears[0].start}`
+            relYear = `${ImageList.docs[i].year}`
             if (ageRating ==='null+'){
                 resultString = `${countriesList.slice(0, 2).join(", ")}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
             }else{
@@ -268,7 +265,7 @@ if (document.querySelector('.Genre')){
                                 <div class="movie_name"><h1>${ImageList.docs[i].name}</h1></div>
                                 <div class="movie_describe">
                                     <div class="movie_text">
-                                        <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].releaseYears[0].start}</strong></div>
+                                        <div class="movie_element">Год производства <strong class="bl">${ImageList.docs[i].year}</strong></div>
                                         <div class="movie_element">Страна <strong class="bl">${countriesList.join(", ")}</strong></div>
                                         <div class="movie_element">Жанр <strong class="bl">${genreslist.join(", ")}</strong></div>
                                         <div class="rating_block">
@@ -882,6 +879,30 @@ if (document.querySelector('.mv_li1')){
         .catch(error => {
             console.error('There was an error:', error);
         });
+    }
+}
+
+async function get_film_name() {
+    const response = await fetch(`http://127.0.0.1:5000/api/gigachat_film`);
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    data = await response.json();
+    film_name_gigachat = data.content;
+    API_URL = `https://api.kinopoisk.dev/v1.4/movie/search?page=1&limit=5&query=${encodeURIComponent(film_name_gigachat)}`;
+    try {
+        const response = await fetch(API_URL, options);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        data = await response.json();
+        console.log(data);
+        ImageList = data;
+        LenOfImageList = ImageList.docs.length; // Указываем длину списка
+        i = 0;
+        ThroughList(); // Вызываем функцию для обработки списка
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
     }
 }
 
