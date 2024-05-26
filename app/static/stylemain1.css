@@ -91,6 +91,10 @@ header{
     padding-left: 20px;
     padding-right: 20px;
 }
+a {
+    text-decoration:none;
+    color: black;
+  }
 .Heart:hover{
     color:#ef5350;
 }
