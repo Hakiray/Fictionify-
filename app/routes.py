@@ -123,23 +123,39 @@ def add_to_favorites():
             # Если фильм уже в списке понравившихся, пропускаем его
             print('aaaaaaaaaaaaaaaaaa')
             continue
-
-        movie = FavoriteMovie(
-            kp_id=data['id'],
-            name=data['name'],
-            description=data['description'],
-            shortDescription=data['shortDescription'],
-            kp_rating=data['rating']['kp'],
-            imdb_rating=data['rating']['imdb'],
-            ageRating=data['ageRating'],
-            posterUrl=data['poster']['url'],
-            posterPreviewUrl=data['poster']['previewUrl'],
-            genres=', '.join([genre['name'] for genre in data['genres']]),  # Преобразуем в строку
-            countries=', '.join([country['name'] for country in data['countries']]),  # Преобразуем в строку
-            releaseStart=data['releaseYears'][0]['start'],  # Год начала
-            releaseEnd=data['releaseYears'][0]['end'],  # Год окончания
-            user_id=current_user.id,  # Идентификатор текущего пользователя
-        )
+        try:
+            movie = FavoriteMovie(
+                kp_id=data['id'],
+                name=data['name'],
+                description=data['description'],
+                shortDescription=data['shortDescription'],
+                kp_rating=data['rating']['kp'],
+                imdb_rating=data['rating']['imdb'],
+                ageRating=data['ageRating'],
+                posterUrl=data['poster']['url'],
+                posterPreviewUrl=data['poster']['previewUrl'],
+                genres=', '.join([genre['name'] for genre in data['genres']]),  # Преобразуем в строку
+                countries=', '.join([country['name'] for country in data['countries']]),  # Преобразуем в строку
+                releaseStart=data['releaseYears'][0]['start'],  # Год начала
+                releaseEnd=data['releaseYears'][0]['end'],  # Год окончания
+                user_id=current_user.id,  # Идентификатор текущего пользователя
+            )
+        except:
+            movie = FavoriteMovie(
+                kp_id=data['id'],
+                name=data['name'],
+                description=data['description'],
+                shortDescription=data['shortDescription'],
+                kp_rating=data['rating']['kp'],
+                imdb_rating=data['rating']['imdb'],
+                ageRating=data['ageRating'],
+                posterUrl=data['poster']['url'],
+                posterPreviewUrl=data['poster']['previewUrl'],
+                genres=', '.join([genre['name'] for genre in data['genres']]),  # Преобразуем в строку
+                countries=', '.join([country['name'] for country in data['countries']]),  # Преобразуем в строку
+                releaseStart=data['year'],  # Год начала
+                user_id=current_user.id,  # Идентификатор текущего пользователя
+            )
     db.session.add(movie)  # Добавляем фильм в базу данных
     # Сохраняем все изменения в базе данных
     db.session.commit()
