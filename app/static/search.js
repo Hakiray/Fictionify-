@@ -1,12 +1,12 @@
 let API_URL;
 const options = {
     method: 'GET',
-    headers: { accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN' }
+    headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
 };
 
 var data;
 
-document.getElementById('search-button').addEventListener('click', function() {
+document.getElementById('search-button').addEventListener('click', function () {
     const query = document.getElementById('search-input').value;
     if (query) {
         performSearch(query);
@@ -68,7 +68,7 @@ function CreateMovieElement(movie) {
     return div;
 }
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     // Выбираем родительский элемент, например, <ul>
     const list = document.querySelector('.mv_li2');
 
@@ -94,21 +94,22 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Выбираем родительский элемент, например, <ul>
     const list = document.querySelector('.mv_li2');
-    if(list){
-        list.addEventListener('click', function(event) {
-        let movieElement = event.target.closest('.movie');
-        if (movieElement) {
-            searchById(movieElement.id);
-        }
+    if (list) {
+        list.addEventListener('click', function (event) {
+            let movieElement = event.target.closest('.movie');
+            if (movieElement) {
+                searchById(movieElement.id);
+            }
         })
+    } else {
+        console.error("Элемент с классом 'movie' не найден.");
     }
-    else{ console.error("Элемент с классом 'movie' не найден.");}
 });
 
-function MovieCard(movie){
+function MovieCard(movie) {
     const div = document.createElement('div');
     let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.jpg";
     let country = movie.countries.map(country => country.name).join(', ');
@@ -146,11 +147,11 @@ function MovieCard(movie){
                         <div class="rating_block">
                             <div class="srv_rate">
                                 <img class="logo1" src="../static/kinopoisk-icon-main.png">
-                                <strong class="rate">${movie.rating.kp != '0' ? movie.rating.kp : "Нет"}</strong>
+                                <strong class="rate">${movie.rating.kp != '0' ? movie.rating.kp.toFixed(1) : "Нет"}</strong>
                             </div>
                             <div class="srv_rate">
-                                <img class="logo2" src="../static/jopa.png" >
-                                <strong class="rate">${movie.rating.imdb != '0' ? movie.rating.imdb : "Нет"}</strong>
+                                <img class="logo2" src="../static/imdb.png" >
+                                <strong class="rate">${movie.rating.imdb != '0' ? movie.rating.imdb.toFixed(1) : "Нет"}</strong>
                             </div>
                         </div>
                         <div class="movie_retell">
@@ -187,11 +188,12 @@ function MovieCard(movie){
 }
 
 let newfilm;
-function UpdateMovieCard(movie){
+
+function UpdateMovieCard(movie) {
     console.log(movie);
     newfilm = movie;
     const MovieCardContent = document.querySelector('.selected_movie');
-    MovieCardContent.innerHTML = '' ;
+    MovieCardContent.innerHTML = '';
     MovieCardContent.appendChild(MovieCard(movie))
 }
 
@@ -208,7 +210,7 @@ function displayResults(data) {
 
 //ОШИБКА 500
 //отправлка лайкнутого фильма
-function fetchUser(Liked){
+function fetchUser(Liked) {
     fetch('/api/favorites/add', {
         method: "POST",
         headers: {
@@ -216,31 +218,32 @@ function fetchUser(Liked){
         },
         body: JSON.stringify(Liked),
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Something went wrong with the network response.');
-        }
-    })
-    .then(info => {
-        console.log(info);
-    })
-    .catch(error => {
-        console.error('There was an error:', error);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong with the network response.');
+            }
+        })
+        .then(info => {
+            console.log(info);
+        })
+        .catch(error => {
+            console.error('There was an error:', error);
+        });
 }
 
 //сохраняем новый фильм с поиска
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-      if (event.target.closest('.willwatch')) {
-        console.log(JSON.stringify([newfilm]));
-        fetchUser([newfilm]);
-        //location.reload() //тип убрал и перезагружаю страницу
-      }
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.willwatch')) {
+            console.log(JSON.stringify([newfilm]));
+            fetchUser([newfilm]);
+            //location.reload() //тип убрал и перезагружаю страницу
+        }
     });
 });
+
 // краткое содержание фильма с поиска через гигачат
 
 async function get_summary(film_name) {
@@ -260,11 +263,11 @@ async function get_summary(film_name) {
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-      if (event.target.closest('.summary')) {
-          let movie_data = newfilm.name + '~' + newfilm.year + '~' + newfilm.genres[0];
-          get_summary(movie_data);
-      }
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.summary')) {
+            let movie_data = newfilm.name + '~' + newfilm.year + '~' + newfilm.genres[0];
+            get_summary(movie_data);
+        }
     });
 });

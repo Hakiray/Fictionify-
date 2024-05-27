@@ -321,9 +321,9 @@ def get_rate(movie_name):
     average_rating = db.session.query(func.avg(RateMovie.rating)).filter_by(name=movie_name).scalar()
     if not movie:
         return jsonify({
-        'rate': 0,
-        'average_rate': average_rating
-    })
+            'rate': 0,
+            'average_rate': average_rating
+        })
     return jsonify({
         'rate': movie.rating,
         'average_rate': average_rating

@@ -1,19 +1,19 @@
 //считывание данные с форм ввода
 let Password = document.querySelector('#Password');
 let RepeatPassword = document.querySelector('#RepeatPassword');
-let Name = document.querySelector('#UserName'); 
+let Name = document.querySelector('#UserName');
 
 let submit = document.querySelector('.button') //для кнопки зарегаться
 
 let users = {};
 
 //функция для создания объекта для нового пользователя
-function User(Name, Password){
+function User(Name, Password) {
     this.Name = Name;
     this.Password = Password;
 }
 
-function createId(users){
+function createId(users) {
     return Object.keys(users).length;
 }
 
@@ -23,18 +23,16 @@ submit.addEventListener('click', () => {
     const UserPassword = Password.value;
     const UserRepeatPassword = RepeatPassword.value;
 
-    if (UserPassword === UserRepeatPassword){ 
+    if (UserPassword === UserRepeatPassword) {
         const user = new User(UserName, UserPassword);
         const UserId = 'User' + createId(users);
         if (Object.values(users).some(existingUser => existingUser.name === user.name && existingUser.password === user.password)) {
             alert('Пользователь с таким именем и паролем уже существует.');
-        }
-        else{
+        } else {
             users[UserId] = user;
             console.log(users); // нужен для проверки
         }
-    }
-    else{
+    } else {
         alert('Пароли не совпадают')
     }
 })

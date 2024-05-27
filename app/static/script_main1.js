@@ -1,6 +1,5 @@
-
-//let API_KEY = '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN';  
-let API_URL;  
+//let API_KEY = '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN';
+let API_URL;
 let StrReleaseCountry = '';
 let StrReleaseDate = '';
 let StrGenreList = '';
@@ -11,52 +10,49 @@ let SortingName = '';
 let film_name_gigachat;
 
 
-function getUserAPI_URL(){
+function getUserAPI_URL() {
     fetch('/api/preferences', {
         method: "GET",
     })
-    .then(response => response.json())
-    .then(info => {
-        Destroy = info;
-        console.log('adadada');
-        console.log(Destroy);
-        if (Destroy[2].length >= 1) {
-            StrReleaseDate = Destroy[2][0].split(',');
-            StrReleaseDate = StrReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
-            ReleaseYearsStart = `&releaseYears.start=${StrReleaseDate}`;
-        }
-        else {
-            ReleaseYearsStart = "&releaseYears.start=1874-2050";
-        }
-        if (Destroy[1].length >= 1) {
-            StrReleaseCountry = Destroy[1][0].split(',');
-            StrReleaseCountry = StrReleaseCountry.join('&countries.name=');
-            CountriesName = `&countries.name=${StrReleaseCountry}`;
-        }
-        else {
-            CountriesName = '';
-        }
+        .then(response => response.json())
+        .then(info => {
+            Destroy = info;
+            console.log('adadada');
+            console.log(Destroy);
+            if (Destroy[2].length >= 1) {
+                StrReleaseDate = Destroy[2][0].split(',');
+                StrReleaseDate = StrReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
+                ReleaseYearsStart = `&releaseYears.start=${StrReleaseDate}`;
+            } else {
+                ReleaseYearsStart = "&releaseYears.start=1874-2050";
+            }
+            if (Destroy[1].length >= 1) {
+                StrReleaseCountry = Destroy[1][0].split(',');
+                StrReleaseCountry = StrReleaseCountry.join('&countries.name=');
+                CountriesName = `&countries.name=${StrReleaseCountry}`;
+            } else {
+                CountriesName = '';
+            }
 
-        if (Destroy[0].length >= 1) {
-            StrReleaseGenre = Destroy[0][0].split(',');
-            StrReleaseGenre = StrReleaseGenre.join('&genres.name=');
-            GenresName = `&genres.name=${StrReleaseGenre}`;
-        }
-        else {
-            GenresName = ''
-        }
-        console.log(GenresName, CountriesName, ReleaseYearsStart);
-        
-        fetchMovies();
-    })
-    .catch(error => {
-        console.error('Ошибка при получении данных:', error);
-    });
+            if (Destroy[0].length >= 1) {
+                StrReleaseGenre = Destroy[0][0].split(',');
+                StrReleaseGenre = StrReleaseGenre.join('&genres.name=');
+                GenresName = `&genres.name=${StrReleaseGenre}`;
+            } else {
+                GenresName = ''
+            }
+            console.log(GenresName, CountriesName, ReleaseYearsStart);
+
+            fetchMovies();
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
 }
 
-if (document.querySelector(`.Country`)){
+if (document.querySelector(`.Country`)) {
     getUserAPI_URL(); //Надо будет убрать api_url в
-    console.log(GenresName, CountriesName, ReleaseYearsStart); 
+    console.log(GenresName, CountriesName, ReleaseYearsStart);
 }
 
 const options = {
@@ -67,25 +63,26 @@ const options = {
 let Liked = []
 
 //получение списка лайков пользователя
-function getUserLike(){
+function getUserLike() {
     fetch('/api/favorites', {
         method: "GET",
     })
-    .then(response => response.json())
-    .then(info => {
-        // Предполагая, что info - это массив объектов, представляющих понравившиеся фильмы
-        Liked = info; // Сохраняем полученные данные в список Liked
-        console.log(Liked); // Выводим в консоль список Liked
-        if (document.querySelector('.mv_li1')){
-            updateUI()}
-    })
-    .catch(error => {
-        console.error('Ошибка при получении данных:', error);
-    });
+        .then(response => response.json())
+        .then(info => {
+            // Предполагая, что info - это массив объектов, представляющих понравившиеся фильмы
+            Liked = info; // Сохраняем полученные данные в список Liked
+            console.log(Liked); // Выводим в консоль список Liked
+            if (document.querySelector('.mv_li1')) {
+                updateUI()
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
 }
 
 //создание html контента по списку liked
-function updateUI(){ //Для LikedMovies
+function updateUI() { //Для LikedMovies
     const Liked_MovieContent = document.querySelector('.mv_li1');
     if (Liked_MovieContent && Liked.length > 0) {
         Liked.forEach(movie => {
@@ -97,13 +94,14 @@ function updateUI(){ //Для LikedMovies
 
 
 //чтобы не получать лайки 2 раза (это получение в main1)
-if (!document.querySelector('.mv_li1')){
-    getUserLike();}
+if (!document.querySelector('.mv_li1')) {
+    getUserLike();
+}
 
 
 //отправка лайкнутого фильма
-if (document.querySelector('.Genre')){
-    function fetchUser(Liked){
+if (document.querySelector('.Genre')) {
+    function fetchUser(Liked) {
         fetch('/api/favorites/add', {
             method: "POST",
             headers: {
@@ -111,20 +109,21 @@ if (document.querySelector('.Genre')){
             },
             body: JSON.stringify(Liked),
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Something went wrong with the network response.');
-            }
-        })
-        .then(info => {
-            console.log(info);
-        })
-        .catch(error => {
-            console.error('There was an error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong with the network response.');
+                }
+            })
+            .then(info => {
+                console.log(info);
+            })
+            .catch(error => {
+                console.error('There was an error:', error);
+            });
     }
+
     let i = 0;
     let j = 1;
     let ImageList;
@@ -138,8 +137,9 @@ if (document.querySelector('.Genre')){
     console.log(ReleaseYearsStart);
     console.log(CountriesName);
     console.log(SortingName);
+
     //запрос на фильмы
-    function fetchMovies(){
+    function fetchMovies() {
         API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears&notNullFields=name&notNullFields=rating.imdb&notNullFields=year&notNullFields=poster.url${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
         console.log(API_URL);
         fetch(API_URL, options)
@@ -162,29 +162,30 @@ if (document.querySelector('.Genre')){
     const div = document.createElement('div');
     div.className = 'modal0';
     div.id = "my-modal0"
-    function ThroughList(){
-        if (ImageList.docs.length === 0){
+
+    function ThroughList() {
+        if (ImageList.docs.length === 0) {
             i = 0;
             j = 1;
             alert("Фильмы кончились, поменяйте фильтр");
             return;
         }
-        if (i > LenOfImageList-1){
-            j +=1;
+        if (i > LenOfImageList - 1) {
+            j += 1;
             fetchMovies();
             return;
         }
-        if (i === LenOfImageList-1 ){
-            if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url){
+        if (i === LenOfImageList - 1) {
+            if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
                 image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
                 MovieName.textContent = `${ImageList.docs[i].name}`;
                 countriesList = ImageList.docs[i].countries.map(country => country.name);
                 genreslist = ImageList.docs[i].genres.map(genre => genre.name);
                 ageRating = `${ImageList.docs[i].ageRating}+`;
                 relYear = `${ImageList.docs[i].releaseYears[0].start}`
-                if (ageRating ==='null+'){
+                if (ageRating === 'null+') {
                     resultString = `${countriesList.slice(0, 2).join(", ")}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
-                }else{
+                } else {
                     resultString = `${countriesList.slice(0, 2).join(", ")}, ${ageRating}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
                 }
                 console.log(countriesList);
@@ -215,7 +216,7 @@ if (document.querySelector('.Genre')){
                                                     <strong class="rate">${kp_rating}</strong>
                                                 </div>
                                                 <div class="srv_rate">
-                                                    <img class="logo2" src="../static/jopa.png" >
+                                                    <img class="logo2" src="../static/imdb.png" >
                                                     <strong class="rate">${imdb_rating}</strong>
                                                 </div>
                                             </div>
@@ -233,21 +234,20 @@ if (document.querySelector('.Genre')){
                 document.body.appendChild(div);
                 i += 1;
                 console.log(i);
-            }else{
-                i+=1;
+            } else {
+                i += 1;
                 ThroughList();
             }
-            }
-        else if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
+        } else if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
             image.innerHTML = `<img src=${ImageList.docs[i].poster.url} width="350" height="500" alt="" ></img>`;
             MovieName.textContent = `${ImageList.docs[i].name}`;
             countriesList = ImageList.docs[i].countries.map(country => country.name);
             genreslist = ImageList.docs[i].genres.map(genre => genre.name);
             ageRating = `${ImageList.docs[i].ageRating}+`;
             relYear = `${ImageList.docs[i].releaseYears[0].start}`
-            if (ageRating ==='null+'){
+            if (ageRating === 'null+') {
                 resultString = `${countriesList.slice(0, 2).join(", ")}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
-            }else{
+            } else {
                 resultString = `${countriesList.slice(0, 2).join(", ")}, ${ageRating}, ${relYear}`;//Обрезается и показывает страны-создатели (иногда без тех, что уазаны в фильтре)
             }
             console.log(countriesList);
@@ -278,7 +278,7 @@ if (document.querySelector('.Genre')){
                                                 <strong class="rate">${kp_rating}</strong>
                                             </div>
                                             <div class="srv_rate">
-                                                <img class="logo2" src="../static/jopa.png" >
+                                                <img class="logo2" src="../static/imdb.png" >
                                                 <strong class="rate">${imdb_rating}</strong>
                                             </div>
                                         </div>
@@ -296,8 +296,8 @@ if (document.querySelector('.Genre')){
             document.body.appendChild(div);
             i = (i + 1) % LenOfImageList;
             console.log(i);
-        }else{
-            for (i; i<= LenOfImageList-1; i++){
+        } else {
+            for (i; i <= LenOfImageList - 1; i++) {
                 if (ImageList.docs[i] && ImageList.docs[i].poster && ImageList.docs[i].poster.url) {
                     ThroughList()
                     break;
@@ -307,9 +307,9 @@ if (document.querySelector('.Genre')){
     }
 
     //модальное окно фильмов
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
-            if(event.target && event.target.className === "Tinder"){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
+            if (event.target && event.target.className === "Tinder") {
                 var modal = document.getElementById("my-modal0");
                 if (modal) {
                     modal.classList.add("open");
@@ -320,10 +320,10 @@ if (document.querySelector('.Genre')){
             }
         });
     })
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
             let closeButton = event.target.closest("#close-my-modal-btn");
-            if(closeButton){
+            if (closeButton) {
                 var modal = document.getElementById("my-modal0");
                 if (modal) {
                     modal.classList.remove("open");
@@ -342,25 +342,24 @@ if (document.querySelector('.Genre')){
 
     //Нажатие на сердечко
     let Like = document.querySelector('.Heart2');
-    Like.addEventListener('click', () =>{
-        if (!Liked.some(item => item.name === ImageList.docs[i-1].name)) {
-            Liked.push(ImageList.docs[i-1]);
-            console.log(JSON.stringify([Liked[Liked.length-1]]));
-            fetchUser([Liked[Liked.length-1]]);
+    Like.addEventListener('click', () => {
+        if (!Liked.some(item => item.name === ImageList.docs[i - 1].name)) {
+            Liked.push(ImageList.docs[i - 1]);
+            console.log(JSON.stringify([Liked[Liked.length - 1]]));
+            fetchUser([Liked[Liked.length - 1]]);
         }
     })
     Like.addEventListener('click', () => {
-        div.innerHTML=``;
+        div.innerHTML = ``;
         ThroughList();
     });
 
     //нажатие на крестик
     let Skip = document.querySelector('.Cross');
     Skip.addEventListener('click', () => {
-        div.innerHTML=``;
+        div.innerHTML = ``;
         ThroughList();
     });
-    
 
 
     //Это надо для recomendation.html
@@ -369,31 +368,31 @@ if (document.querySelector('.Genre')){
     let ReleaseDate = [];
     let DateList = document.querySelectorAll('.ReleaseDate')
 
-    DateList.forEach(function(Date) {
-        Date.addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            let content = event.target.textContent;
-            let index = ReleaseDate.indexOf(content);
-            if (index !== -1) {
-                ReleaseDate.splice(index, 1);
-                event.target.style.background = '#f5f5f5';
-            } else {
-                ReleaseDate.push(content);
-                event.target.style.background = '#ffee58';
+    DateList.forEach(function (Date) {
+        Date.addEventListener('click', function (event) {
+            if (event.target.tagName === 'A') {
+                let content = event.target.textContent;
+                let index = ReleaseDate.indexOf(content);
+                if (index !== -1) {
+                    ReleaseDate.splice(index, 1);
+                    event.target.style.background = '#f5f5f5';
+                } else {
+                    ReleaseDate.push(content);
+                    event.target.style.background = '#ffee58';
+                }
+                console.log(ReleaseDate);
+                StrReleaseDate = ReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
+                if (StrReleaseDate !== '') {
+                    ReleaseYearsStart = `&releaseYears.start=${StrReleaseDate}`;
+                } else {
+                    ReleaseYearsStart = '&releaseYears.start=1874-2050';
+                }
+                fetchMovies(); //это в recomendation.html не надо
+                console.log(ReleaseYearsStart);
+                console.log(API_URL);
+                event.preventDefault();
             }
-            console.log(ReleaseDate);
-            StrReleaseDate = ReleaseDate.map(date => date.replace(/\s/g, '').replace("До", "1874-")).join('&releaseYears.start=');
-            if (StrReleaseDate !== ''){
-                ReleaseYearsStart = `&releaseYears.start=${StrReleaseDate}`;
-            }else{
-                ReleaseYearsStart = '&releaseYears.start=1874-2050';
-            }
-            fetchMovies(); //это в recomendation.html не надо
-            console.log(ReleaseYearsStart);
-            console.log(API_URL);
-            event.preventDefault();
-        }
-    });
+        });
     });
 
 
@@ -401,31 +400,31 @@ if (document.querySelector('.Genre')){
     let ReleaseCountry = [];
     let CountryList = document.querySelectorAll('.Country')
 
-    CountryList.forEach(function(Country) {
-        Country.addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            let content = event.target.textContent;
-            let index = ReleaseCountry.indexOf(content);
-            if (index !== -1) {
-                ReleaseCountry.splice(index, 1);
-                event.target.style.background = '#f5f5f5';
-            } else {
-                ReleaseCountry.push(content);
-                event.target.style.background = '#ffee58';
+    CountryList.forEach(function (Country) {
+        Country.addEventListener('click', function (event) {
+            if (event.target.tagName === 'A') {
+                let content = event.target.textContent;
+                let index = ReleaseCountry.indexOf(content);
+                if (index !== -1) {
+                    ReleaseCountry.splice(index, 1);
+                    event.target.style.background = '#f5f5f5';
+                } else {
+                    ReleaseCountry.push(content);
+                    event.target.style.background = '#ffee58';
+                }
+                console.log(ReleaseCountry);
+                StrReleaseCountry = ReleaseCountry.join('&countries.name=');
+                if (StrReleaseCountry !== '') {
+                    CountriesName = `&countries.name=${StrReleaseCountry}`;
+                } else {
+                    CountriesName = '';
+                }
+                fetchMovies(); //это в recomendation.html не надо
+                console.log(CountriesName);
+                console.log(API_URL);
+                event.preventDefault();
             }
-            console.log(ReleaseCountry);
-            StrReleaseCountry = ReleaseCountry.join('&countries.name=');
-            if (StrReleaseCountry !== ''){
-                CountriesName = `&countries.name=${StrReleaseCountry}`;
-            }else{
-                CountriesName = '';
-            }
-            fetchMovies(); //это в recomendation.html не надо
-            console.log(CountriesName);
-            console.log(API_URL);
-            event.preventDefault();
-        }
-    });
+        });
     });
 
 
@@ -433,75 +432,72 @@ if (document.querySelector('.Genre')){
     let ReleaseGenre = [];
     let GenreList = document.querySelectorAll('.Genre')
 
-    GenreList.forEach(function(Genre) {
-        Genre.addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            let content = event.target.textContent;
-            let index = ReleaseGenre.indexOf(content);
-            if (index !== -1) {
-                ReleaseGenre.splice(index, 1);
-                event.target.style.background = '#f5f5f5';
-            } else {
-                ReleaseGenre.push(content);
-                event.target.style.background = '#ffee58';
-            }
+    GenreList.forEach(function (Genre) {
+        Genre.addEventListener('click', function (event) {
+            if (event.target.tagName === 'A') {
+                let content = event.target.textContent;
+                let index = ReleaseGenre.indexOf(content);
+                if (index !== -1) {
+                    ReleaseGenre.splice(index, 1);
+                    event.target.style.background = '#f5f5f5';
+                } else {
+                    ReleaseGenre.push(content);
+                    event.target.style.background = '#ffee58';
+                }
 
-            console.log(ReleaseGenre);
-            StrReleaseGenre = ReleaseGenre.join('&genres.name=');
-            if (StrReleaseGenre !== ''){
-                GenresName = `&genres.name=${StrReleaseGenre}`;
-            }else{
-                GenresName = ``;
+                console.log(ReleaseGenre);
+                StrReleaseGenre = ReleaseGenre.join('&genres.name=');
+                if (StrReleaseGenre !== '') {
+                    GenresName = `&genres.name=${StrReleaseGenre}`;
+                } else {
+                    GenresName = ``;
+                }
+                fetchMovies(); //это в recomendation.html не надо
+                console.log(GenresName);
+                console.log(API_URL);
+                event.preventDefault();
             }
-            fetchMovies(); //это в recomendation.html не надо
-            console.log(GenresName);
-            console.log(API_URL);
-            event.preventDefault();
-        }
-    });
+        });
     });
 
-        // выбор сортировки
+    // выбор сортировки
     let ReleaseSort = [];
     let sortingList = document.querySelectorAll('.Sorting')
 
-    sortingList.forEach(function(Sort) {
-        Sort.addEventListener('click', function(event) {
-        if (event.target.tagName === 'A') {
-            let content = event.target.textContent;
-            let index = ReleaseSort.indexOf(content);
-            if (index !== -1) {
-                ReleaseSort.splice(index, 1);
-                event.target.style.background = '#f5f5f5';
-            } else {
-                ReleaseSort.push(content);
-                event.target.style.background = '#ffee58';
+    sortingList.forEach(function (Sort) {
+        Sort.addEventListener('click', function (event) {
+            if (event.target.tagName === 'A') {
+                let content = event.target.textContent;
+                let index = ReleaseSort.indexOf(content);
+                if (index !== -1) {
+                    ReleaseSort.splice(index, 1);
+                    event.target.style.background = '#f5f5f5';
+                } else {
+                    ReleaseSort.push(content);
+                    event.target.style.background = '#ffee58';
+                }
+                if (ReleaseSort.indexOf("по популярности") != -1 && ReleaseSort.indexOf("по новизне") != -1) {
+                    SortingName = '&sortType=-1&sortField=votes.kp&sortType=-1&sortField=year';
+                } else if (ReleaseSort.indexOf("по новизне") != -1) {
+                    SortingName = '&sortType=-1&sortField=year';
+                } else if (ReleaseSort.indexOf("по популярности") != -1) {
+                    SortingName = '&sortType=-1&sortField=votes.kp';
+                }
+                console.log(SortingName);
+                fetchMovies();
+                event.preventDefault();
             }
-            if (ReleaseSort.indexOf("по популярности") != -1 && ReleaseSort.indexOf("по новизне") != -1) {
-                SortingName = '&sortType=-1&sortField=votes.kp&sortType=-1&sortField=year';
-            }
-            else if (ReleaseSort.indexOf("по новизне") != -1) {
-                SortingName = '&sortType=-1&sortField=year';
-            }
-            else if (ReleaseSort.indexOf("по популярности") != -1) {
-                SortingName = '&sortType=-1&sortField=votes.kp';
-            }
-            console.log(SortingName);
-            fetchMovies();
-            event.preventDefault();
-        }
-    });
+        });
     });
 }
 //дальше в recomendation.html не надо
 
 
-
-
 //other html
-if (document.querySelector('.mv_li1')){
+if (document.querySelector('.mv_li1')) {
     getUserLike();
-    function CreateMovieElement(movie){
+
+    function CreateMovieElement(movie) {
         const div = document.createElement('div');
         console.log(movie);
         let movie_name = movie.name ? (movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name) : "Нет названия";
@@ -529,8 +525,7 @@ if (document.querySelector('.mv_li1')){
     }
 
 
-
-    /*  
+    /*
     <div class="movie_element">Режиссер <strong class="bl">Николас Виндинг Рефн</strong></div> 
     <div class="movie_element">Сценарий <strong class="bl">Хуссейн Амини, Джеймс Саллис</strong></div>
     <div class="movie_element">Продюсер <strong class="bl">Мишель Литвак, Джон Палермо, Марк Э. Платт</strong></div>
@@ -546,9 +541,9 @@ if (document.querySelector('.mv_li1')){
         </li>
     </ul>
     */
-    function MovieCard(movie, InnerRating, filmReviews){
+    function MovieCard(movie, InnerRating, filmReviews) {
         console.log('ss');
-        if (InnerRating.error === "Нет такого фильма в базе данных"){
+        if (InnerRating.error === "Нет такого фильма в базе данных") {
             InnerRating = {average_rate: 0, rate: 0};
         }
         console.log(sigma);
@@ -561,7 +556,7 @@ if (document.querySelector('.mv_li1')){
         const reviewsContainer = document.createElement('div');
         reviewsContainer.id = 'reviews-container';
         reviewsContainer.innerHTML = `<p class='otzivi'>Отзывы</p>`
-        if (filmReviews.error !== 'Нет отзывов'){
+        if (filmReviews.error !== 'Нет отзывов') {
             filmReviews.forEach(review => {
                 const reviewDiv = document.createElement('div')
                 reviewDiv.className = "ReviewCard";
@@ -592,7 +587,7 @@ if (document.querySelector('.mv_li1')){
                                         <strong class="rate">${kp_rating.slice(0, 3)}</strong>
                                     </div>
                                     <div class="srv_rate">
-                                        <img class="logo2" src="../static/jopa.png" >
+                                        <img class="logo2" src="../static/imdb.png" >
                                         <strong class="rate">${imdb_rating.slice(0, 3)}</strong>
                                     </div>
                                     <div>
@@ -679,44 +674,45 @@ if (document.querySelector('.mv_li1')){
         div.appendChild(reviewsContainer);
         return div
     }
+
     let sigma;  //хранение текущего названия фильма
     function UpdateMovieCard(id) {
         const MovieCardContent = document.querySelector('.selected_movie');
         const movie = Liked[id]; // Убедитесь, что переменные объявлены корректно
         sigma = movie.id;
         console.log(sigma, 'eesssa');
-      
+
         // Асинхронно получаем рейтинг и отзывы, используя Promise.all для их одновременного выполнения
         Promise.all([
             getfilmark(sigma),
             getfilmReviews(sigma)
         ])
-        .then(results => {
-            const InnerRating = results[0]; 
-            const filmReviews = results[1]; 
-    
-            console.log('eshkere');
-            console.log(Liked[id]);
-            MovieCardContent.innerHTML = ''; // Очищаем контент карточки
-            MovieCardContent.appendChild(MovieCard(movie, InnerRating, filmReviews));
-        })
-        .catch(error => {
-            console.error('Произошла ошибка при обновлении карточки фильма:', error);
-        });
+            .then(results => {
+                const InnerRating = results[0];
+                const filmReviews = results[1];
+
+                console.log('eshkere');
+                console.log(Liked[id]);
+                MovieCardContent.innerHTML = ''; // Очищаем контент карточки
+                MovieCardContent.appendChild(MovieCard(movie, InnerRating, filmReviews));
+            })
+            .catch(error => {
+                console.error('Произошла ошибка при обновлении карточки фильма:', error);
+            });
     }
 
     //нажатие на фильм
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Выбираем родительский элемент, например, <ul>
         const list = document.querySelector('.mv_li1');
 
-        list.addEventListener('click', function(event) {
+        list.addEventListener('click', function (event) {
             // ищем ближайшего предка с классом 'like_movie_li'.
             let target = event.target;
             while (target != this) {
                 if (target.classList.contains('like_movie_li')) {
 
-                    document.querySelectorAll('.like_movie_li').forEach(function(el) {
+                    document.querySelectorAll('.like_movie_li').forEach(function (el) {
                         el.style.background = '';
                     });
                     target.style.background = 'white';
@@ -730,72 +726,73 @@ if (document.querySelector('.mv_li1')){
     let index;
 
     //меняем карточку
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         // Выбираем родительский элемент, например, <ul>
         const list = document.querySelector('.mv_li1');
-        if(list){
-            list.addEventListener('click', function(event) {
-            let movieElement = event.target.closest('.movie');
-            if (movieElement) {
-                let movieId = movieElement.id;
-                console.log('Нажат фильм с ID:', movieId);
-                for (let i = 0; i < Liked.length; i++) {
-                    if (`${Liked[i].id}` === movieId) { 
-                        UpdateMovieCard(i); 
-                        break;
+        if (list) {
+            list.addEventListener('click', function (event) {
+                let movieElement = event.target.closest('.movie');
+                if (movieElement) {
+                    let movieId = movieElement.id;
+                    console.log('Нажат фильм с ID:', movieId);
+                    for (let i = 0; i < Liked.length; i++) {
+                        if (`${Liked[i].id}` === movieId) {
+                            UpdateMovieCard(i);
+                            break;
+                        }
                     }
                 }
-            }
             })
+        } else {
+            console.error("Элемент с классом 'movie' не найден.");
         }
-        else{ console.error("Элемент с классом 'movie' не найден.");}
     });
 
 
-
     //получение оценки текущего фильма с бд
-    function getfilmark(sigma){
+    function getfilmark(sigma) {
         return fetch(`/api/rate/${sigma}`, {
             method: "GET",
         })
-        .then(response => response.json()) 
-        .then(info => {
-            console.log(info);
-            return info; 
-        })
-        .catch(error => {
-            console.error('Ошибка при получении данных:', error);
-        });
+            .then(response => response.json())
+            .then(info => {
+                console.log(info);
+                return info;
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+            });
     }
 
     //получение отзывов фильмы
 
-    function getfilmReviews(sigma){
+    function getfilmReviews(sigma) {
         return fetch(`/api/review/${sigma}`, {
             method: "GET",
         })
-        .then(response => response.json()) 
-        .then(info => {
-            console.log(info);
-            return info;
-        })
-        .catch(error => {
-            console.error('Ошибка при получении данных:', error);
-        });
+            .then(response => response.json())
+            .then(info => {
+                console.log(info);
+                return info;
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+            });
     }
 
     //отзыв
     //считывание текста
     let message;
+
     function saveAndClearText() {
-        let textareaElement = document.querySelector('.inputreview'); 
-        message = textareaElement.value; 
-        textareaElement.value = ''; 
+        let textareaElement = document.querySelector('.inputreview');
+        message = textareaElement.value;
+        textareaElement.value = '';
     }
 
     //Добавка класса Open
-    document.addEventListener('DOMContentLoaded', function() {
-        document.body.addEventListener('click', function(event) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (event) {
             var targetElement = event.target;
             while (targetElement != null) {
                 if (targetElement.id === 'open-modal-btnx') {
@@ -805,7 +802,7 @@ if (document.querySelector('.mv_li1')){
                     } else {
                         console.error('Element with id "my-modalx" not found.');
                     }
-                    break; 
+                    break;
                 }
                 targetElement = targetElement.parentElement;
             }
@@ -813,10 +810,10 @@ if (document.querySelector('.mv_li1')){
     });
 
     //убираем класс Open
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
             let closeButton = event.target.closest("#close-my-modal-btnx");
-            if(closeButton){
+            if (closeButton) {
                 var modal = document.getElementById("my-modalx");
                 if (modal) {
                     modal.classList.remove("open");
@@ -827,8 +824,9 @@ if (document.querySelector('.mv_li1')){
             }
         });
     })
+
     //запрос отправки отзыва
-    function fetchUserReview(){
+    function fetchUserReview() {
         fetch('/api/add_review', {
             method: "POST",
             headers: {
@@ -836,30 +834,31 @@ if (document.querySelector('.mv_li1')){
             },
             body: JSON.stringify([message, sigma]),
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Something went wrong with the network response.');
-            }
-        })
-        .then(data => {
-            console.log('успешно отправлено', data);
-        })
-        .catch(error => {
-            console.error('There was an error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong with the network response.');
+                }
+            })
+            .then(data => {
+                console.log('успешно отправлено', data);
+            })
+            .catch(error => {
+                console.error('There was an error:', error);
+            });
     }
+
     //отправка на серв по клику
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
             let closeButton = event.target.closest(".sendx");
-            if (closeButton){
+            if (closeButton) {
                 saveAndClearText()
                 fetchUserReview()
-                if (message == ""){
+                if (message == "") {
                     alert('Оставьте отзыв');
-                }else{
+                } else {
                     console.log(JSON.stringify([message, sigma]))
                     JustPushedReview = document.getElementById('reviews-container');
                     const reviewDiv = document.createElement('div')
@@ -876,7 +875,7 @@ if (document.querySelector('.mv_li1')){
                     <p class="user_review">${message}</p>
                     <p class="time">${currentGMTString}</p>`
                     JustPushedReview.appendChild(reviewDiv);
-                
+
                 }
             }
         });
@@ -885,8 +884,8 @@ if (document.querySelector('.mv_li1')){
 
     //оценка
     //Добавка класса Open
-    document.addEventListener('DOMContentLoaded', function() {
-        document.body.addEventListener('click', function(event) {
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (event) {
             var targetElement = event.target;
             while (targetElement != null) {
                 if (targetElement.id === 'open-modal-btn') {
@@ -896,17 +895,17 @@ if (document.querySelector('.mv_li1')){
                     } else {
                         console.error('Element with id "my-modal" not found.');
                     }
-                    break; 
+                    break;
                 }
                 targetElement = targetElement.parentElement;
             }
         });
     });
     //убираем класс Open
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
             let closeButton = event.target.closest("#close-my-modal-btn");
-            if(closeButton){
+            if (closeButton) {
                 var modal = document.getElementById("my-modal");
                 if (modal) {
                     modal.classList.remove("open");
@@ -920,22 +919,23 @@ if (document.querySelector('.mv_li1')){
 
 
     //отправка на серв по клику
-    document.addEventListener('DOMContentLoaded', function(){
-        document.body.addEventListener("click", function(event){
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener("click", function (event) {
             let closeButton = event.target.closest(".send");
-            if(closeButton && star !== 11){
-                Rate(star, sigma, function() {
+            if (closeButton && star !== 11) {
+                Rate(star, sigma, function () {
                     const ratingElement = document.querySelector('.innerrating');
-                    ratingElement.textContent = star; 
+                    ratingElement.textContent = star;
                     console.log('success');
                     getfilmark(sigma).then(InnerRating => {
                         console.log('eshkere');
                         console.log(InnerRating);
                         websiterating = document.querySelector('.rate0');
-                        websiterating.textContent = InnerRating.average_rate.toFixed(1);;
+                        websiterating.textContent = InnerRating.average_rate.toFixed(1);
+                        ;
                     });
                 });
-            } else if(closeButton && star === 11){
+            } else if (closeButton && star === 11) {
                 alert('поставьте оценку фильму');
             }
         });
@@ -944,14 +944,16 @@ if (document.querySelector('.mv_li1')){
 
     //нажатие на число оценки
     let star;
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         let selected;
+
         function resetColors() {
-            document.querySelectorAll('.rate2 p').forEach(function(p) {
+            document.querySelectorAll('.rate2 p').forEach(function (p) {
                 p.style.color = ''; // Сброс цвета текста
             });
         }
-        document.body.addEventListener('click', function(e) {
+
+        document.body.addEventListener('click', function (e) {
             // чекаем, что элемент на который нажали это тег p в .rate2
             if (e.target && e.target.nodeName === 'P' && e.target.closest('.rate2')) {
                 resetColors();
@@ -971,75 +973,75 @@ if (document.querySelector('.mv_li1')){
     });
 
     //запрос на отправку фильма и оценки пользователя нужен будет адрес (отправка оценки и названия фильма)
-    function Rate(star, sigma, callback){
+    function Rate(star, sigma, callback) {
         fetch('/api/rate/add', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ name: sigma, rate: star }),
+            body: JSON.stringify({name: sigma, rate: star}),
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Something went wrong with the network response.');
-            }
-        })
-        .then(info => {
-            console.log(info);
-            console.log("wtf")
-            console.log(JSON.stringify({ name: sigma, rate: star }));
-            if(callback) {
-                callback(info); // Вызываем колбэк с результатом
-            }
-        })
-        .catch(error => {
-            console.error('There was an error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong with the network response.');
+                }
+            })
+            .then(info => {
+                console.log(info);
+                console.log("wtf")
+                console.log(JSON.stringify({name: sigma, rate: star}));
+                if (callback) {
+                    callback(info); // Вызываем колбэк с результатом
+                }
+            })
+            .catch(error => {
+                console.error('There was an error:', error);
+            });
     }
 
     //удаление у пользователя
-    document.addEventListener('DOMContentLoaded', function() {
-        document.addEventListener('click', function(event) {
-          // Проверяем, что элемент имеет класс delete
-          if (event.target.closest('.delete')) {
-            // Ищем фильм с нужным названием sigma в Liked
-            let index = Liked.findIndex(function(item) {
-                return item.id === sigma;
-              });
-            fetchUserDel(Liked[index]);// удаляю, отправляю фулл элемент удаляемый
-            console.log(index);
-            Liked = Liked.filter(function(item) {
-                return item.id !== sigma;
-              });
-          }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('click', function (event) {
+            // Проверяем, что элемент имеет класс delete
+            if (event.target.closest('.delete')) {
+                // Ищем фильм с нужным названием sigma в Liked
+                let index = Liked.findIndex(function (item) {
+                    return item.id === sigma;
+                });
+                fetchUserDel(Liked[index]);// удаляю, отправляю фулл элемент удаляемый
+                console.log(index);
+                Liked = Liked.filter(function (item) {
+                    return item.id !== sigma;
+                });
+            }
         });
-      });
+    });
 
     //запрос на удаление (нужно будет попросить поменять ссылку)
-    function fetchUserDel(movie){
+    function fetchUserDel(movie) {
         fetch('/api/favorites/delete', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ id: movie.id }),
+            body: JSON.stringify({id: movie.id}),
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error('Something went wrong with the network response.');
-            }
-        })
-        .then(info => {
-            console.log(info);
-            location.reload();
-        })
-        .catch(error => {
-            console.error('There was an error:', error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Something went wrong with the network response.');
+                }
+            })
+            .then(info => {
+                console.log(info);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('There was an error:', error);
+            });
     }
 }
 
@@ -1067,10 +1069,10 @@ async function get_film_name() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-      if (event.target.closest('.gigachat_btn')) {
-          get_film_name();
-      }
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.gigachat_btn')) {
+            get_film_name();
+        }
     });
 });

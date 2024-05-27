@@ -36,7 +36,8 @@ def load_user(id):
 class Review(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     body: so.Mapped[str] = so.mapped_column(sa.String(140))
-    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(pytz.timezone('Europe/Moscow')))
+    timestamp: so.Mapped[datetime] = so.mapped_column(index=True,
+                                                      default=lambda: datetime.now(pytz.timezone('Europe/Moscow')))
     kp_id: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
     author: so.Mapped['User'] = so.relationship(back_populates='reviews')
