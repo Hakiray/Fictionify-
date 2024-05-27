@@ -667,7 +667,7 @@ input[type="text"]:focus {
     cursor:pointer;
 }
 .modal_close_btn:hover svg path{
-    fill:blue;
+    fill: #e67070;
 }
 
 /*если у modal появится open, то настройки применятся к modal_box*/
@@ -711,6 +711,7 @@ input[type="text"]:focus {
     display:flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 .send:hover{
     background-color: #aaa;

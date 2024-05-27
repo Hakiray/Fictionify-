@@ -22,6 +22,14 @@ def search():
 
 @app.route('/recomendation')
 def recomendation():
+    user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
+    if not user_preference or not user_preference.preferences_chosen:
+        return render_template('recomendation.html')
+    return render_template('main1.html')
+
+
+@app.route('/profile')
+def profile():
     return render_template('recomendation.html')
 
 
