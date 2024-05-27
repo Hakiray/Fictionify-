@@ -141,8 +141,8 @@ if (document.querySelector('.Genre')){
     console.log(SortingName);
     //запрос на фильмы
     function fetchMovies(){
-        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
-        console.log(GenresName);
+        API_URL = `https://api.kinopoisk.dev/v1.4/movie?page=${j}&limit=10&selectFields=name&selectFields=id&selectFields=persons&selectFields=description&selectFields=shortDescription&selectFields=rating&selectFields=ageRating&selectFields=poster&selectFields=genres&selectFields=countries&selectFields=movieLength&selectFields=releaseYears&notNullFields=name&notNullFields=rating.imdb&notNullFields=year&notNullFields=poster.url${ReleaseYearsStart}${GenresName}${CountriesName}${SortingName}`;
+        console.log(API_URL);
         fetch(API_URL, options)
             .then(response => response.json())
             .then(response => {
@@ -192,8 +192,10 @@ if (document.querySelector('.Genre')){
                 Description.textContent = `${resultString}`;
                 Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
                 kp_rating = `${(ImageList.docs[i].rating.kp).toFixed(1)}`
+                kp_rating = kp_rating !== '0.0' ? kp_rating : "Нет";
                 imdb_rating = `${(ImageList.docs[i].rating.imdb).toFixed(1)}`
-                console.log(div.className)
+                imdb_rating = imdb_rating !== '0.0' ? imdb_rating : "Нет";
+                console.log(kp_rating);
                 div.innerHTML = `<div class="modal_box0">
                                     <button class=modal_close_btn id="close-my-modal-btn">
                                         <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -253,8 +255,10 @@ if (document.querySelector('.Genre')){
             Description.textContent = `${resultString}`;
             Rating.textContent = `${parseFloat(ImageList.docs[i].rating.imdb).toFixed(1)}`;
             kp_rating = `${(ImageList.docs[i].rating.kp).toFixed(1)}`
+            kp_rating = kp_rating !== '0.0' ? kp_rating : "Нет";
             imdb_rating = `${(ImageList.docs[i].rating.imdb).toFixed(1)}`
-            console.log(div.className)
+            imdb_rating = imdb_rating !== '0.0' ? imdb_rating : "Нет";
+            console.log(kp_rating);
             div.innerHTML = `<div class="modal_box0">
                                 <button class=modal_close_btn id="close-my-modal-btn">
                                     <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -602,8 +606,8 @@ if (document.querySelector('.mv_li1')){
                                 </li>
                                 <li>
                                     <div class="movie_panel_btn ratte" id="open-modal-btn">
-                                        <img class="mv_pnl_btn" src="../static/star.png" }}">
-                                        <div class="btn_name">Оценить</div>
+                                        <img id="open-modal-btn" class="mv_pnl_btn" src="../static/star.png" }}">
+                                        <div id="open-modal-btn" class="btn_name">Оценить</div>
                                     </div>
                                     <div class="YourMark">
                                         <p class="YourMark1">Ваша оценка</p>
