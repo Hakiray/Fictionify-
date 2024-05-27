@@ -5,6 +5,7 @@ import sqlalchemy as sa
 import sqlalchemy.orm as so
 from app import db, login
 from flask_login import UserMixin
+import pytz
 
 
 class User(UserMixin, db.Model):
@@ -12,7 +13,7 @@ class User(UserMixin, db.Model):
     username: so.Mapped[str] = so.mapped_column(sa.String(64), index=True, unique=True)
     email: so.Mapped[str] = so.mapped_column(sa.String(120), index=True, unique=True)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
-    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+    reviews: so.WriteOnlyMapped['Review'] = so.relationship(back_populates='author')
     favorites: so.WriteOnlyMapped['FavoriteMovie'] = so.relationship(back_populates='author')
     preference: so.WriteOnlyMapped['UserPreference'] = so.relationship(back_populates='author')
     rate: so.WriteOnlyMapped['RateMovie'] = so.relationship(back_populates='author')
@@ -32,15 +33,13 @@ def load_user(id):
     return db.session.get(User, int(id))
 
 
-class Post(db.Model):
+class Review(db.Model):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
     body: so.Mapped[str] = so.mapped_column(sa.String(140))
-    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(timezone.utc))
+    timestamp: so.Mapped[datetime] = so.mapped_column(index=True, default=lambda: datetime.now(pytz.timezone('Europe/Moscow')))
+    kp_id: so.Mapped[int] = so.mapped_column(sa.Integer, nullable=True)
     user_id: so.Mapped[int] = so.mapped_column(sa.ForeignKey(User.id), index=True)
-    author: so.Mapped['User'] = so.relationship(back_populates='posts')
-
-    def __repr__(self):
-        return '<Post {}>'.format(self.body)
+    author: so.Mapped['User'] = so.relationship(back_populates='reviews')
 
 
 class FavoriteMovie(db.Model):

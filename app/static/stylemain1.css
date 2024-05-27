@@ -67,7 +67,6 @@ header{
     width: 75px;
 }
 
-
 .mv_pnl_btn1{
     width: 25px;
     height: 25px;
@@ -260,7 +259,7 @@ a {
 .movie_photo {
     align-content: flex-end;
     width: 225px;
-    height: 350px;
+    height: 300px;
 }
 .movie_photo0 {
     align-content: flex-end;
@@ -294,6 +293,7 @@ a {
     width: 70%;
     float: left;
 }
+
 .movie_panel1 {
     position:absolute;
     left: 730px;
@@ -317,9 +317,38 @@ a {
 .movie_panel_btn:hover {
     background: white;
 }
+.movie_panel_btnx {
+    user-select: none;
+    margin-top: 5px;
+    height: 32px;
+    border: 0 solid black;
+    background-color: #e0e0e0;
+    -webkit-border-radius: 59px;
+    -moz-border-radius: 59px;
+    border-radius: 59px;
+    display:flex;
+    align-items: center;
+}
+
+.movie_panel_btnx:hover {
+    background: white;
+}
+
 
 .YourMark{
     margin-top: 5px;
+    height: 32px;
+    border: 0 solid black;
+    background-color: #e0e0e0;
+    -webkit-border-radius: 59px;
+    -moz-border-radius: 59px;
+    border-radius: 59px;
+    display:flex;
+    align-items: center;
+}
+.Review{
+    margin-top: 5px;
+    width: 700px;
     height: 32px;
     border: 0 solid black;
     background-color: #e0e0e0;
@@ -347,6 +376,13 @@ a {
     font-size: 20px;
 }
 .YourMark1{
+    padding-left: 20px;
+    font-family: sans-serif;
+    list-style: none;
+    font-size: 20px;
+    text-decoration: none;
+}
+.Review1{
     padding-left: 20px;
     font-family: sans-serif;
     list-style: none;
@@ -674,7 +710,63 @@ input[type="text"]:focus {
 .modal.open .modal_box{
     transform: scale(1);
 }
+/* модальное окно отзывов*/
+.modalx{
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100vh;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, .3);
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .4s, visibility .4s ;
+}
 
+/*если класс open есть, то модальное окно отображается (у элемента с классом modal )*/
+.modalx.open{
+    visibility: visible;
+    opacity: 1;
+}
+.modal_boxx{
+    position:relative;
+
+    width: 800px;
+    height: 300px;
+    padding: 20px;
+    z-index: 1;
+    margin: 30px 15px;
+    background-color: #f5f5f5;
+    box-shadow: 0px 0px 17px -7px rgba(34, 60, 80, 0.2);
+    transform:scale(0);
+    transition: transform .8s;
+}
+
+.modal_close_btnx{
+    border: none;
+    background-color: transparent;
+    position: absolute;
+    top:8px;
+    right:8px;
+    padding: 10px;
+    z-index: 1000;
+    cursor:pointer;
+}
+.modal_close_btnx:hover svg path{
+    fill:blue;
+}
+
+/*если у modal появится open, то настройки применятся к modal_box*/
+.modalx.open .modal_boxx{
+    transform: scale(1);
+}
+
+/*оценивание в модальном окне оценки */
 .rate2{
     margin-top: 30px;
     background-color: #f5f5f5;
@@ -715,4 +807,67 @@ input[type="text"]:focus {
 }
 .send:hover{
     background-color: #aaa;
+}
+/*Отправка отзыва*/
+.sendx{
+    border: 3px solid black;
+    background-color: white;
+    position:relative;
+    top: 15px;
+    left: 300px;
+    width: 100px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.sendx:hover{
+    background-color: #aaa;
+}
+.inputreview{
+    width: 650px !important;
+    height: 200px; 
+    padding: 10px; 
+    font-size: 16px; 
+    border: 1px solid #cccccc; 
+    border-radius: 4px; 
+    resize: vertical; 
+    overflow: auto; 
+}
+#reviews-container{
+    background-color: #f5f5f5;
+
+    margin-top: 20px;
+    margin-left: 10px;
+    border: 3px solid gray;
+    -webkit-box-shadow: 5px 6px 10px 0px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 5px 6px 10px 0px rgba(34, 60, 80, 0.2);
+    box-shadow: 5px 6px 10px 0px rgba(34, 60, 80, 0.2);
+    height: 300px;
+    width: 500px;
+    padding-left: 10px;
+    overflow-y: auto;
+}
+.otzivi{
+    font-size: 30px;
+    margin-top: 0px;
+}
+.ReviewCard{
+    margin-top: -20px;
+    width: 480px; /* Произвольная фиксированная ширина или проценты, если нужен элемент переменной ширины */
+    word-wrap: break-word; /* Это свойство обеспечит перенос слов */
+    white-space: normal; /* Убедиться, что пробельные символы ведут себя как обычно */
+    overflow-wrap: break-word; /* Дополнительное свойство для переноса длинных слов */
+}
+.user_name{
+    color:#e67070;
+    font-size: 18px;
+}
+.user_review{
+    margin-top: -17px;
+}
+.time{
+    color:#9e9e9e;
+    font-size:12px;
+    margin-top: -11px;
+    margin-bottom: 40px;
 }

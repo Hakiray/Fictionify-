@@ -11,7 +11,6 @@ let SortingName = '';
 let film_name_gigachat;
 
 
-
 function getUserAPI_URL(){
     fetch('/api/preferences', {
         method: "GET",
@@ -55,16 +54,17 @@ function getUserAPI_URL(){
     });
 }
 
-getUserAPI_URL(); //Надо будет убрать api_url в
-console.log(GenresName, CountriesName, ReleaseYearsStart); 
+if (document.querySelector(`.Country`)){
+    getUserAPI_URL(); //Надо будет убрать api_url в
+    console.log(GenresName, CountriesName, ReleaseYearsStart); 
+}
+
 const options = {
     method: 'GET',
     headers: {accept: 'application/json', 'X-API-KEY': 'H18WF07-6R44C0Y-GCJ71GY-FKFQP9A'}
 }
 
-
 let Liked = []
-
 
 //получение списка лайков пользователя
 function getUserLike(){
@@ -132,7 +132,6 @@ if (document.querySelector('.Genre')){
     let countriesList;
     let ageRating;
     let resultString;
-
 
     console.log('dvs')
     console.log(GenresName);
@@ -307,7 +306,7 @@ if (document.querySelector('.Genre')){
         }
     }
 
-    //модальное окно abkm
+    //модальное окно фильмов
     document.addEventListener('DOMContentLoaded', function(){
         document.body.addEventListener("click", function(event){
             if(event.target && event.target.className === "Tinder"){
@@ -547,21 +546,36 @@ if (document.querySelector('.mv_li1')){
         </li>
     </ul>
     */
-    function MovieCard(movie, InnerRating){
+    function MovieCard(movie, InnerRating, filmReviews){
         console.log('ss');
         if (InnerRating.error === "Нет такого фильма в базе данных"){
             InnerRating = {average_rate: 0, rate: 0};
         }
         console.log(sigma);
         console.log(InnerRating);
+        console.log(filmReviews)
         console.log(movie.name);
         const div = document.createElement('div');
         div.className = 'MovieCard';
         div.id = `${movie.id}`;
+        const reviewsContainer = document.createElement('div');
+        reviewsContainer.id = 'reviews-container';
+        reviewsContainer.innerHTML = `<p class='otzivi'>Отзывы</p>`
+        if (filmReviews.error !== 'Нет отзывов'){
+            filmReviews.forEach(review => {
+                const reviewDiv = document.createElement('div')
+                reviewDiv.className = "ReviewCard";
+                reviewDiv.innerHTML = `
+                <p class="user_name">${review.user_name}</p>
+                <p class="user_review">${review.review}</p>
+                <p class="time">${review.timestamp}</p>`
+                reviewsContainer.appendChild(reviewDiv);
+            });
+        }
         let poster_url = movie.posterUrl != null ? movie.posterUrl : "../static/zaglushka.jpg";
-        let kp_rating = movie.kp_rating != '0' ?  movie.kp_rating : "Нет";
-        let imdb_rating = movie.imdb_rating != '0' ? movie.imdb_rating : "Нет";
-        InnerRating.average_rate = InnerRating.average_rate != "0" ? InnerRating.average_rate : "Нет"
+        let kp_rating = movie.kp_rating != '0' ? '' + movie.kp_rating : "Нет";
+        let imdb_rating = movie.imdb_rating != '0' ? '' + movie.imdb_rating : "Нет";
+        InnerRating.average_rate = (InnerRating.average_rate != "0" && InnerRating.average_rate != null) ? '' + InnerRating.average_rate : "Нет";
         InnerRating.rate = InnerRating.rate != "0" ? InnerRating.rate : ""
         countriesList = movie.countries;
         div.innerHTML = `
@@ -575,15 +589,15 @@ if (document.querySelector('.mv_li1')){
                                 <div class="rating_block">
                                     <div class="srv_rate">
                                         <img class="logo1" src="../static/kinopoisk-icon-main.png">
-                                        <strong class="rate">${kp_rating}</strong>
+                                        <strong class="rate">${kp_rating.slice(0, 3)}</strong>
                                     </div>
                                     <div class="srv_rate">
                                         <img class="logo2" src="../static/jopa.png" >
-                                        <strong class="rate">${imdb_rating}</strong>
+                                        <strong class="rate">${imdb_rating.slice(0, 3)}</strong>
                                     </div>
                                     <div>
                                         <img class="logo3" src="../static/logo.png">
-                                        <strong class="rate0">${InnerRating.average_rate}</strong>
+                                        <strong class="rate0">${InnerRating.average_rate.slice(0, 3)}</strong>
                                     </div>
                                 </div>
                                 <div class="movie_retell">
@@ -599,12 +613,6 @@ if (document.querySelector('.mv_li1')){
                         <div class="movie_panel_li">
                             <ul class="mv_li">
                                 <li>
-                                    <div class="movie_panel_btn delete">
-                                        <img class="mv_pnl_btn" src="../static/broken_heart.png"">
-                                        <div class="btn_name">Убрать из списка</div>
-                                    </div>
-                                </li>
-                                <li>
                                     <div class="movie_panel_btn ratte" id="open-modal-btn">
                                         <img id="open-modal-btn" class="mv_pnl_btn" src="../static/star.png" }}">
                                         <div id="open-modal-btn" class="btn_name">Оценить</div>
@@ -615,6 +623,9 @@ if (document.querySelector('.mv_li1')){
                                             <img class="mv_mrk_btn" src="../static/star.png" }}">
                                             <p class="innerrating">${InnerRating.rate}</p>
                                         </div>
+                                    </div>
+                                    <div class="movie_panel_btnx review" id="open-modal-btnx">
+                                        <p class="Review1">Оставить отзыв</p>
                                     </div>
                                     <div class="modal" id="my-modal">
                                         <div class="modal_box">
@@ -640,7 +651,24 @@ if (document.querySelector('.mv_li1')){
                                             <div class="send">
                                                 <p>Сохранить</p>
                                             </div>
+                                            
 
+                                        </div>
+                                    </div>
+                                    <div class="modalx" id="my-modalx">
+                                        <div class="modal_boxx">
+                                            <button type="button" class="modal_close_btnx" id="close-my-modal-btnx">
+                                                <svg width="23" height="25" viewBox="0 0 23 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.09082 0.03125L22.9999 22.0294L20.909 24.2292L-8.73579e-05 2.23106L2.09082 0.03125Z" fill="#333333"></path>
+                                                    <path d="M0 22.0295L20.9091 0.0314368L23 2.23125L2.09091 24.2294L0 22.0295Z" fill="#333333"></path>
+                                                </svg>
+                                            </button>
+                                            <div class="Review1">
+                                                <textarea class="inputreview"></textarea>
+                                            </div>
+                                            <div class="sendx">
+                                                <p>Сохранить</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -648,20 +676,32 @@ if (document.querySelector('.mv_li1')){
                         </div>
                     </div>
         `
+        div.appendChild(reviewsContainer);
         return div
     }
     let sigma;  //хранение текущего названия фильма
-    function UpdateMovieCard(id){
+    function UpdateMovieCard(id) {
         const MovieCardContent = document.querySelector('.selected_movie');
         const movie = Liked[id]; // Убедитесь, что переменные объявлены корректно
         sigma = movie.id;
-        console.log(sigma, 'eesssa')
-        getfilmark(sigma).then(InnerRating => {
+        console.log(sigma, 'eesssa');
+      
+        // Асинхронно получаем рейтинг и отзывы, используя Promise.all для их одновременного выполнения
+        Promise.all([
+            getfilmark(sigma),
+            getfilmReviews(sigma)
+        ])
+        .then(results => {
+            const InnerRating = results[0]; 
+            const filmReviews = results[1]; 
+    
             console.log('eshkere');
             console.log(Liked[id]);
-            MovieCardContent.innerHTML = '';
-            // Мы передаём InnerRating в MovieCard, потому что он был возвращён из getfilmark
-            MovieCardContent.appendChild(MovieCard(movie, InnerRating));
+            MovieCardContent.innerHTML = ''; // Очищаем контент карточки
+            MovieCardContent.appendChild(MovieCard(movie, InnerRating, filmReviews));
+        })
+        .catch(error => {
+            console.error('Произошла ошибка при обновлении карточки фильма:', error);
         });
     }
 
@@ -713,9 +753,7 @@ if (document.querySelector('.mv_li1')){
 
 
 
-    //дальше меню на карточке фильма
-
-
+    //получение оценки текущего фильма с бд
     function getfilmark(sigma){
         return fetch(`/api/rate/${sigma}`, {
             method: "GET",
@@ -730,23 +768,140 @@ if (document.querySelector('.mv_li1')){
         });
     }
 
+    //получение отзывов фильмы
 
-    //оценка
+    function getfilmReviews(sigma){
+        return fetch(`/api/review/${sigma}`, {
+            method: "GET",
+        })
+        .then(response => response.json()) 
+        .then(info => {
+            console.log(info);
+            return info;
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
+    }
+
+    //отзыв
+    //считывание текста
+    let message;
+    function saveAndClearText() {
+        let textareaElement = document.querySelector('.inputreview'); 
+        message = textareaElement.value; 
+        textareaElement.value = ''; 
+    }
+
     //Добавка класса Open
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(event) {
+            var targetElement = event.target;
+            while (targetElement != null) {
+                if (targetElement.id === 'open-modal-btnx') {
+                    var modal = document.getElementById('my-modalx');
+                    if (modal) {
+                        modal.classList.add('open');
+                    } else {
+                        console.error('Element with id "my-modalx" not found.');
+                    }
+                    break; 
+                }
+                targetElement = targetElement.parentElement;
+            }
+        });
+    });
+
+    //убираем класс Open
     document.addEventListener('DOMContentLoaded', function(){
         document.body.addEventListener("click", function(event){
-            if(event.target && event.target.id === "open-modal-btn"){
-                var modal = document.getElementById("my-modal");
+            let closeButton = event.target.closest("#close-my-modal-btnx");
+            if(closeButton){
+                var modal = document.getElementById("my-modalx");
                 if (modal) {
-                    modal.classList.add("open");
-                    star = 11; //Отслеживаем открытие модального окна
+                    modal.classList.remove("open");
                     console.log('eshkere2')
                 } else {
-                    console.error('Element with id "my-modal" not found.');
+                    console.error('Element with id "my-modalx" not found.');
                 }
             }
         });
     })
+    //запрос отправки отзыва
+    function fetchUserReview(){
+        fetch('/api/add_review', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify([message, sigma]),
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong with the network response.');
+            }
+        })
+        .then(data => {
+            console.log('успешно отправлено', data);
+        })
+        .catch(error => {
+            console.error('There was an error:', error);
+        });
+    }
+    //отправка на серв по клику
+    document.addEventListener('DOMContentLoaded', function(){
+        document.body.addEventListener("click", function(event){
+            let closeButton = event.target.closest(".sendx");
+            if (closeButton){
+                saveAndClearText()
+                fetchUserReview()
+                if (message == ""){
+                    alert('Оставьте отзыв');
+                }else{
+                    console.log(JSON.stringify([message, sigma]))
+                    JustPushedReview = document.getElementById('reviews-container');
+                    const reviewDiv = document.createElement('div')
+                    let user_name = document.querySelector('.Name').textContent;
+                    let date = new Date();
+                    const moscowOffset = 0;
+                    const localOffset = date.getTimezoneOffset();
+                    const offsetDifference = moscowOffset - localOffset;
+                    date.setMinutes(date.getMinutes() + offsetDifference);
+                    let currentGMTString = date.toUTCString();
+                    reviewDiv.className = "ReviewCard";
+                    reviewDiv.innerHTML = `
+                    <p class="user_name">${user_name}</p>
+                    <p class="user_review">${message}</p>
+                    <p class="time">${currentGMTString}</p>`
+                    JustPushedReview.appendChild(reviewDiv);
+                
+                }
+            }
+        });
+    });
+
+
+    //оценка
+    //Добавка класса Open
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.addEventListener('click', function(event) {
+            var targetElement = event.target;
+            while (targetElement != null) {
+                if (targetElement.id === 'open-modal-btn') {
+                    var modal = document.getElementById('my-modal');
+                    if (modal) {
+                        modal.classList.add('open');
+                    } else {
+                        console.error('Element with id "my-modal" not found.');
+                    }
+                    break; 
+                }
+                targetElement = targetElement.parentElement;
+            }
+        });
+    });
     //убираем класс Open
     document.addEventListener('DOMContentLoaded', function(){
         document.body.addEventListener("click", function(event){
@@ -833,6 +988,7 @@ if (document.querySelector('.mv_li1')){
         })
         .then(info => {
             console.log(info);
+            console.log("wtf")
             console.log(JSON.stringify({ name: sigma, rate: star }));
             if(callback) {
                 callback(info); // Вызываем колбэк с результатом

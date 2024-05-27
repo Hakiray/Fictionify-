@@ -3,7 +3,7 @@ from app import app, db
 from flask_login import current_user, login_user, logout_user, login_required
 from app.gigachat_api import get_token
 import sqlalchemy as sa
-from app.models import User, FavoriteMovie, UserPreference, RateMovie
+from app.models import User, FavoriteMovie, UserPreference, RateMovie, Review
 from urllib.parse import urlsplit, parse_qs
 from sqlalchemy import func
 import requests
@@ -318,11 +318,12 @@ def add_rate():
 @login_required
 def get_rate(movie_name):
     movie = RateMovie.query.filter_by(name=movie_name, user_id=current_user.id).first()
-
-    if not movie:
-        return jsonify({'error': 'Нет такого фильма в базе данных'}), 404
-
     average_rating = db.session.query(func.avg(RateMovie.rating)).filter_by(name=movie_name).scalar()
+    if not movie:
+        return jsonify({
+        'rate': 0,
+        'average_rate': average_rating
+    })
     return jsonify({
         'rate': movie.rating,
         'average_rate': average_rating
@@ -364,3 +365,40 @@ def film_summary(movie_data):
     }
     response = requests.post(url=url, headers=headers, data=payload, verify='').json()
     return response["choices"][0]["message"]
+
+
+@app.route('/api/add_review', methods=['POST'])
+@login_required
+def add_review():
+    data = request.json
+    review_body, kp_id = data
+    user_review = Review.query.filter_by(user_id=current_user.id, kp_id=kp_id).first()
+    if not user_review:
+        user_review = Review(user_id=current_user.id)
+        db.session.add(user_review)
+
+    user_review.body = review_body
+    user_review.kp_id = kp_id
+    db.session.commit()
+
+    return jsonify({'message': 'Review added'}), 200
+
+
+@app.route('/api/review/<int:movie_name>', methods=['GET'])
+@login_required
+def get_review(movie_name):
+    reviews = Review.query.filter_by(kp_id=movie_name).all()
+    if not reviews:
+        return jsonify({'error': 'Нет отзывов'}), 404
+
+    reviews_data = []
+    for review in reviews:
+        user = User.query.get(review.user_id)
+        reviews_data.append({
+            'kp_id': review.kp_id,
+            'review': review.body,
+            'timestamp': review.timestamp,
+            'user_name': user.username
+        })
+
+    return jsonify(reviews_data)
