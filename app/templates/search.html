@@ -15,7 +15,9 @@
                 <aside>
                     <form>
                         <div class="LogoutPanel">
-                            <img src="{{ url_for('static', filename='user-solid-72.png') }}" class="Icon1">
+                            <a href="{{ url_for('recomendation') }}">
+                                <img src="{{ url_for('static', filename='user-solid-72.png') }}" class="Icon1">
+                            </a>
                             <p class="Name">{{ current_user.username }}</p>  <!-- Отображение имени пользователя -->
                             <a href="{{ url_for('logout') }}">  <!-- Ссылка на выход из системы -->
                                 <img src="{{ url_for('static', filename='log-out-regular-72.png') }}" class="Icon2">
