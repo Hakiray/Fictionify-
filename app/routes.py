@@ -22,11 +22,7 @@ def search():
 
 @app.route('/recomendation')
 def recomendation():
-    user_preference = UserPreference.query.filter_by(user_id=current_user.id).first()
-    if not user_preference or not user_preference.preferences_chosen:
-        return render_template('recomendation.html')
-
-    return render_template('main1.html')
+    return render_template('recomendation.html')
 
 
 @app.route('/main1')
@@ -194,7 +190,6 @@ def get_gigachat_film():
     favorites = db.session.query(FavoriteMovie).filter_by(user_id=current_user.id).all()
     film_names = ', '.join([film.name for film in favorites])
     token = get_token()
-    print(film_names)
     url = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions"
     payload = json.dumps({
         "model": "GigaChat",
@@ -224,7 +219,6 @@ def get_gigachat_film():
     }
     response = requests.post(url=url, headers=headers, data=payload, verify='').json()
     return response["choices"][0]["message"]
-
 
 
 @app.route('/api/preferences/save', methods=['POST'])
@@ -265,7 +259,7 @@ def get_preferences():
 
     genres = user_preference.genres.split(', ') if user_preference.genres else []
     countries = user_preference.countries.split(', ') if user_preference.countries else []
-    release_years_start = user_preference.releaseYearsStart.split(', ') if user_preference.countries else []
+    release_years_start = user_preference.releaseYearsStart.split(', ') if user_preference.releaseYearsStart else []
 
     preferences_list = [genres, countries, release_years_start]
 
