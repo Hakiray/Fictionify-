@@ -608,6 +608,12 @@ if (document.querySelector('.mv_li1')) {
                         <div class="movie_panel_li">
                             <ul class="mv_li">
                                 <li>
+                                    <div class="movie_panel_btn delete">
+                                        <img class="mv_pnl_btn" src="../static/broken_heart.png"">
+                                        <div class="btn_name">Убрать из списка</div>
+                                    </div>
+                                </li>
+                                <li>
                                     <div class="movie_panel_btn ratte" id="open-modal-btn">
                                         <img id="open-modal-btn" class="mv_pnl_btn" src="../static/star.png" }}">
                                         <div id="open-modal-btn" class="btn_name">Оценить</div>
