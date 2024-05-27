@@ -1,12 +1,12 @@
 let API_URL;
 const options = {
     method: 'GET',
-    headers: { accept: 'application/json', 'X-API-KEY': '77SRDCC-5N2MRPK-Q9SVW69-QZWQQDW' }
+    headers: {accept: 'application/json', 'X-API-KEY': '3VYPFA8-H37MAZ9-H0JA9A5-CRAJTFN'}
 };
 
 var data;
 
-document.getElementById('search-button').addEventListener('click', function() {
+document.getElementById('search-button').addEventListener('click', function () {
     const query = document.getElementById('search-input').value;
     if (query) {
         performSearch(query);
@@ -46,7 +46,7 @@ async function searchById(id) {
 function CreateMovieElement(movie) {
     const div = document.createElement('div');
     let movie_name = movie.name.length > 40 ? movie.name.slice(0, 40) + '...' : movie.name;
-    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.jpg";
     let age_rating = movie.ageRating != null ? movie.ageRating + '+' : '';
     let imdb_rating = movie.rating.imdb != '0' ? movie.rating.imdb : 'Нет';
     div.className = 'movie';
@@ -68,7 +68,7 @@ function CreateMovieElement(movie) {
     return div;
 }
 
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function () {
     // Выбираем родительский элемент, например, <ul>
     const list = document.querySelector('.mv_li2');
 
@@ -94,23 +94,24 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Выбираем родительский элемент, например, <ul>
     const list = document.querySelector('.mv_li2');
-    if(list){
-        list.addEventListener('click', function(event) {
-        let movieElement = event.target.closest('.movie');
-        if (movieElement) {
-            searchById(movieElement.id);
-        }
+    if (list) {
+        list.addEventListener('click', function (event) {
+            let movieElement = event.target.closest('.movie');
+            if (movieElement) {
+                searchById(movieElement.id);
+            }
         })
+    } else {
+        console.error("Элемент с классом 'movie' не найден.");
     }
-    else{ console.error("Элемент с классом 'movie' не найден.");}
 });
 
-function MovieCard(movie){
+function MovieCard(movie) {
     const div = document.createElement('div');
-    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.png";
+    let poster_url = movie.poster.url != null ? movie.poster.url : "../static/zaglushka.jpg";
     let country = movie.countries.map(country => country.name).join(', ');
     let genres = movie.genres.map(genre => genre.name).join(', ');
     let directors = movie.persons.filter(i => i.enProfession == 'director'); // режиссеры
@@ -133,14 +134,6 @@ function MovieCard(movie){
     div.innerHTML = `
             <div class="movie_data">
                 <div class="movie_name"><h1>${movie.name}</h1></div>
-                <ul class="switch_menu mv_li">
-                    <li class="select_option">
-                        О фильме
-                    </li>
-                    <li class="select_option">
-                        Рецензии зрителей
-                    </li>
-                </ul>
                 <div class="movie_describe">
                     <div class="movie_text">
                         <div class="movie_element">Год производства <strong class="bl">${movie.year}</strong></div>
@@ -154,15 +147,17 @@ function MovieCard(movie){
                         <div class="rating_block">
                             <div class="srv_rate">
                                 <img class="logo1" src="../static/kinopoisk-icon-main.png">
-                                <strong class="rate">${movie.rating.kp != '0' ? movie.rating.kp : "Нет"}</strong>
+                                <strong class="rate">${movie.rating.kp != '0' ? movie.rating.kp.toFixed(1) : "Нет"}</strong>
                             </div>
                             <div class="srv_rate">
-                                <img class="logo2" src="../static/jopa.png" >
-                                <strong class="rate">${movie.rating.imdb != '0' ? movie.rating.imdb : "Нет"}</strong>
+                                <img class="logo2" src="../static/imdb.png" >
+                                <strong class="rate">${movie.rating.imdb != '0' ? movie.rating.imdb.toFixed(1) : "Нет"}</strong>
                             </div>
                         </div>
                         <div class="movie_retell">
                             ${movie.description != null ? movie.description : ''}
+                        </div>
+                        <div class="summary-text movie_element">
                         </div>
                     </div>
                 </div>
@@ -175,8 +170,14 @@ function MovieCard(movie){
                     <ul class="mv_li">
                         <li>
                             <div class="movie_panel_btn willwatch">
-                                <img class="mv_pnl_btn1" src="../static/heart.png"">
+                                <img class="mv_pnl_btn1" src="../static/heart.png">
                                 <div class="btn_name1">Буду смотреть</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="movie_panel_btn summary">
+                                <img class="mv_pnl_btn1" src="../static/book.png">
+                                <div class="btn_name1">Краткий пересказ</div>
                             </div>
                         </li>
                     </ul>
@@ -187,11 +188,12 @@ function MovieCard(movie){
 }
 
 let newfilm;
-function UpdateMovieCard(movie){
+
+function UpdateMovieCard(movie) {
     console.log(movie);
     newfilm = movie;
     const MovieCardContent = document.querySelector('.selected_movie');
-    MovieCardContent.innerHTML = '' ;
+    MovieCardContent.innerHTML = '';
     MovieCardContent.appendChild(MovieCard(movie))
 }
 
@@ -208,7 +210,7 @@ function displayResults(data) {
 
 //ОШИБКА 500
 //отправлка лайкнутого фильма
-function fetchUser(Liked){
+function fetchUser(Liked) {
     fetch('/api/favorites/add', {
         method: "POST",
         headers: {
@@ -216,30 +218,56 @@ function fetchUser(Liked){
         },
         body: JSON.stringify(Liked),
     })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Something went wrong with the network response.');
-        }
-    })
-    .then(info => {
-        console.log(info);
-    })
-    .catch(error => {
-        console.error('There was an error:', error);
-    });
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Something went wrong with the network response.');
+            }
+        })
+        .then(info => {
+            console.log(info);
+        })
+        .catch(error => {
+            console.error('There was an error:', error);
+        });
 }
 
 //сохраняем новый фильм с поиска
-document.addEventListener('DOMContentLoaded', function() {
-    document.addEventListener('click', function(event) {
-      // Проверяем, что элемент имеет класс delete
-      if (event.target.closest('.willwatch')) {
-        // Ищем фильм с нужным названием sigma в Liked
-        console.log(JSON.stringify([newfilm]));
-        fetchUser([newfilm]);// удаляю, отправляю фулл элемент удаляемый
-        //location.reload() //тип убрал и перезагружаю страницу
-      }
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.willwatch')) {
+            console.log(JSON.stringify([newfilm]));
+            fetchUser([newfilm]);
+            //location.reload() //тип убрал и перезагружаю страницу
+        }
+    });
+});
+
+// краткое содержание фильма с поиска через гигачат
+
+async function get_summary(film_name) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/get_summary/${encodeURIComponent(film_name)}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        data = await response.json();
+        console.log(data);
+        const text_summary = document.querySelector('.summary-text');
+        text_summary.innerHTML = `<div class="big"><strong class="bl">Краткий пересказ с помощью Gigachat:</strong></div>
+                                  <div class="summary-text">${data.content}</div>`
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('click', function (event) {
+        if (event.target.closest('.summary')) {
+            let movie_data = newfilm.name + '~' + newfilm.year + '~' + newfilm.genres[0];
+            get_summary(movie_data);
+        }
     });
 });
