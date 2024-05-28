@@ -57,3 +57,4 @@ pip install -r requirements.txt
 ## Полезные ссылки 🔗
 
 - [Архитектура проекта ](https://miro.com/app/board/uXjVKC35LoA=/)
+- [Презентация проекта](https://docs.google.com/presentation/d/1colssJBa_jLRwVcBDdnem4vzvqdhiwTo_SkmrSVP0XA/edit?usp=sharing)
